@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pedidos - Reyand InduPro</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #0b0e14; color: #e1e1e6; margin: 0; padding: 15px; }
+        
+        .header-title { text-align: center; color: #00e5ff; margin-bottom: 5px; font-weight: 800; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.3); }
+        .sub-header { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 20px; }
+        
+        .contenedor-app { display: flex; gap: 20px; flex-wrap: wrap; }
+        .panel-formulario { flex: 1; min-width: 320px; background: #121721; padding: 18px; border-radius: 8px; border: 1px solid #1e293b; }
+        .panel-previsualizacion { flex: 1.2; min-width: 340px; }
+
+        h3 { border-bottom: 2px solid #00e5ff; padding-bottom: 4px; color: #00e5ff; font-size: 0.95rem; text-transform: uppercase; margin-top: 18px; display: flex; justify-content: space-between; align-items: center; }
+        .campo { margin-bottom: 10px; }
+        label { display: block; font-size: 0.8rem; margin-bottom: 3px; color: #94a3b8; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #1e293b; background: #0b0e14; color: #fff; font-size: 0.85rem; }
+        input:focus, select:focus, textarea:focus { border-color: #00e5ff; outline: none; }
+        
+        .fila-2 { display: flex; gap: 8px; }
+        .fila-2 > div { flex: 1; }
+
+        .tarjeta-prenda-input { background: #0b0e14; border-left: 4px solid #00e5ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
+        .tarjeta-capuchon-input { background: #0b0e14; border-left: 4px solid #00b4d8; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
+
+        .cabecera-tarjeta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .acciones-item { display: flex; gap: 5px; }
+        .btn-mini { padding: 4px 8px; border-radius: 4px; border: none; font-size: 0.7rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-dup { background: #3b82f6; color: #fff; }
+        .btn-del { background: #ef4444; color: #fff; }
+        .btn-add { background: #10b981; color: #fff; padding: 5px 10px; font-size: 0.75rem; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
+        .btn-mini:hover, .btn-add:hover { opacity: 0.85; }
+
+        .acciones-btn { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; color: #0b0e14; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; transition: 0.2s; }
+        .btn-cliente { background: #00b4d8; }
+        .btn-taller { background: #00e5ff; }
+        .btn-reset { background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
+        .btn:hover, .btn-reset:hover { opacity: 0.9; }
+
+        /* Documentos de Captura */
+        .hoja-documento { background: #ffffff; color: #111; padding: 20px; border-radius: 6px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); }
+        .encabezado-doc { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0b0e14; padding-bottom: 10px; margin-bottom: 12px; }
+        .brand-doc { display: flex; align-items: center; gap: 12px; }
+        .svg-logo { width: 45px; height: 45px; }
+        .encabezado-doc h2 { margin: 0; font-size: 1.3rem; color: #0b0e14; font-weight: 900; line-height: 1; }
+        .tag-doc { background: #0b0e14; color: #00e5ff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; height: fit-content; }
+
+        .tabla-doc { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 10px; }
+        .tabla-doc th, .tabla-doc td { border: 1px solid #cbd5e1; padding: 6px; font-size: 0.75rem; text-align: left; word-break: break-word; }
+        .tabla-doc th { background: #0b0e14; color: #ffffff; }
+
+        .contenedor-fotos-doc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .foto-preview { width: 85px; height: 85px; object-fit: cover; border: 1px solid #cbd5e1; border-radius: 4px; }
+        .subtitulo-tabla { background: #f1f5f9; font-weight: bold; font-size: 0.8rem; color: #0f172a; padding: 4px 6px; margin-top: 10px; border-left: 3px solid #00b4d8; }
+        
+        .caja-alerta { font-size: 0.75rem; font-weight: bold; padding: 8px 12px; border-radius: 4px; margin-top: 8px; margin-bottom: 10px; text-align: center; }
+        .alerta-pendiente { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+        .alerta-listo { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    </style>
+</head>
+<body>
+
+    <h1 class="header-title">REYAND INDUPRO</h1>
+    <div class="sub-header">Plataforma de Control de Pedidos y Generación de Órdenes</div>
+
+    <div class="contenedor-app">
+        
+        <!-- PANEL FORMULARIO -->
+        <div class="panel-formulario">
+            <h3>
+                1. Datos del Cliente y Economía
+                <button type="button" class="btn-reset" onclick="reiniciarFormulario()">🧹 Limpiar Pedido</button>
+            </h3>
+            <div class="campo"><label>Nombre del Cliente / Empresa:</label><input type="text" id="in_cliente" oninput="actualizar()"></div>
+            <div class="fila-2">
+                <div class="campo"><label>Fecha Abono:</label><input type="date" id="in_fecha_abono" oninput="actualizar()"></div>
+                <div class="campo"><label>Abono ($):</label><input type="number" id="in_abono" value="0" oninput="actualizar()"></div>
+            </div>
+
+            <!-- Checkbox de Confirmación de Abono / Fabricación -->
+            <div class="campo" style="background: #0b0e14; padding: 10px; border-radius: 4px; border: 1px solid #1e293b; margin-top: 10px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fff;">
+                    <input type="checkbox" id="chk_confirmado" style="width: auto;" onchange="actualizar()">
+                    <span>Pedido tomado (Pendiente de abono / Autorización para fabricar)</span>
+                </label>
+            </div>
+
+            <h3>
+                2. Camisas
+                <button type="button" class="btn-add" onclick="agregarCamisa()">➕ Añadir Camisa</button>
+            </h3>
+            <div id="contenedor_camisas_inputs"></div>
+
+            <h3>
+                3. Capuchones
+                <button type="button" class="btn-add" onclick="agregarCapuchon()">➕ Añadir Capuchón</button>
+            </h3>
+            <div id="contenedor_capuchones_inputs"></div>
+
+            <h3>4. Muestras Taller (Fotos)</h3>
+            <div class="campo">
+                <input type="file" id="in_fotos" multiple accept="image/*" onchange="cargarFotos(event)">
+            </div>
+        </div>
+
+        <!-- PANEL PREVISUALIZACIÓN -->
+        <div class="panel-previsualizacion">
+            
+            <div class="acciones-btn">
+                <button class="btn btn-cliente" onclick="descargarImagen('doc-cliente', 'Pedido_Cliente_Reyand')">📥 Descargar Pedido Cliente</button>
+                <button class="btn btn-taller" onclick="descargarImagen('doc-taller', 'Ficha_Taller_Reyand')">🛠️ Descargar Orden Taller</button>
+            </div>
+
+            <!-- DOCUMENTO CLIENTE -->
+            <div class="hoja-documento" id="doc-cliente">
+                <div class="encabezado-doc">
+                    <div class="brand-doc">
+                        <svg class="svg-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="46" stroke="#00e5ff" stroke-width="4" fill="#0b0e14"/>
+                            <path d="M30 68 L50 28 L70 68 L58 68 L50 50 L42 68 Z" fill="#00e5ff"/>
+                        </svg>
+                        <div>
+                            <h2>REYAND INDUPRO</h2>
+                            <small style="font-weight: bold; color: #475569;">Cotización / Confirmación de Pedido</small>
+                        </div>
+                    </div>
+                    <div class="tag-doc">PEDIDO CLIENTE</div>
+                </div>
+
+                <p style="font-size:0.85rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_cliente">---</span> | <strong>Fecha Abono:</strong> <span id="out_fecha_abono">---</span></p>
+
+                <!-- Estado para el Cliente -->
+                <div id="out_estado_cliente" class="caja-alerta alerta-pendiente">
+                    ⚠️ PENDIENTE DE ABONO: La fabricación iniciará una vez confirmado el pago inicial.
+                </div>
+
+                <div id="seccion_out_camisas_cliente">
+                    <div class="subtitulo-tabla">DETALLE DE CAMISAS</div>
+                    <table class="tabla-doc">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Línea</th>
+                                <th>Talla</th>
+                                <th>Colores</th>
+                                <th>Personalización (Nombre/RH/Bandera)</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="out_tabla_camisas_cliente"></tbody>
+                    </table>
+                </div>
+
+                <div id="seccion_out_capuchones_cliente">
+                    <div class="subtitulo-tabla">DETALLE DE CAPUCHONES</div>
+                    <table class="tabla-doc">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Material / Tipo</th>
+                                <th>Talla</th>
+                                <th>Colores / Obs.</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="out_tabla_capuchones_cliente"></tbody>
+                    </table>
+                </div>
+
+                <div style="background: #f8fafc; padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                    <div style="display:flex; justify-content: space-between;">
+                        <span><strong>Total Pedido:</strong> $<span id="out_total">0</span></span>
+                        <span><strong>Abono:</strong> $<span id="out_abono">0</span></span>
+                        <span style="color: #0284c7; font-weight: bold;">Saldo Pendiente: $<span id="out_saldo">0</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOCUMENTO TALLER -->
+            <div class="hoja-documento" id="doc-taller" style="border: 2px dashed #00b4d8;">
+                <div class="encabezado-doc">
+                    <div class="brand-doc">
+                        <svg class="svg-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="46" stroke="#00b4d8" stroke-width="4" fill="#0b0e14"/>
+                            <path d="M30 68 L50 28 L70 68 L58 68 L50 50 L42 68 Z" fill="#00b4d8"/>
+                        </svg>
+                        <div>
+                            <h2>REYAND INDUPRO - TALLER</h2>
+                            <small style="font-weight: bold; color: #475569;">Orden Técnica de Producción</small>
+                        </div>
+                    </div>
+                    <div class="tag-doc" style="background: #00b4d8; color: #0b0e14;">ORDEN TALLER</div>
+                </div>
+
+                <p style="font-size:0.85rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_taller_cliente">---</span> | <strong>Camisas:</strong> <span id="out_taller_cant_camisas">0</span> | <strong>Capuchones:</strong> <span id="out_taller_cant_capuchones">0</span></p>
+
+                <div id="out_estado_fabricacion" class="caja-alerta alerta-pendiente">
+                    ⏳ PEDIDO REGISTRADO - PENDIENTE DE CONFIRMACIÓN DE ABONO PARA INICIAR FABRICACIÓN
+                </div>
+
+                <div id="seccion_out_camisas_taller">
+                    <div class="subtitulo-tabla">PRODUCCIÓN DE CAMISAS</div>
+                    <table class="tabla-doc">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Línea / Cuello</th>
+                                <th>Talla</th>
+                                <th>Colores Prenda / Hilos</th>
+                                <th>Detalle Bordados (Nombre, RH, Bandera)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="out_tabla_camisas_taller"></tbody>
+                    </table>
+                </div>
+
+                <div id="seccion_out_capuchones_taller">
+                    <div class="subtitulo-tabla">PRODUCCIÓN DE CAPUCHONES</div>
+                    <table class="tabla-doc">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Material</th>
+                                <th>Talla</th>
+                                <th>Colores / Especificaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="out_tabla_capuchones_taller"></tbody>
+                    </table>
+                </div>
+
+                <div class="subtitulo-tabla" style="margin-top:15px;">MUESTRAS / REFERENCIAS VISUALES</div>
+                <div class="contenedor-fotos-doc" id="out_fotos_taller"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let contadorCamisas = 0;
+        let contadorCapuchones = 0;
+
+        function agregarCamisa(datos = null) {
+            contadorCamisas++;
+            const id = contadorCamisas;
+            const contenedor = document.getElementById('contenedor_camisas_inputs');
+            
+            const div = document.createElement('div');
+            div.className = 'tarjeta-prenda-input';
+            div.id = `camisa_card_${id}`;
+            div.innerHTML = `
+                <div class="cabecera-tarjeta">
+                    <strong style="color:#00e5ff; font-size:0.85rem;">Camisa #${id}</strong>
+                    <div class="acciones-item">
+                        <button type="button" class="btn-mini btn-dup" onclick="duplicarCamisa('${id}')">📋 Duplicar</button>
+                        <button type="button" class="btn-mini btn-del" onclick="eliminarPrenda('camisa_card_${id}')">🗑️ Eliminar</button>
+                    </div>
+                </div>
+                <div class="fila-2">
+                    <div class="campo">
+                        <label>Línea / Precio:</label>
+                        <select class="cam_linea" onchange="actualizar()">
+                            <option value="Estándar" data-precio="85000">Estándar ($85.000)</option>
+                            <option value="Premium" data-precio="95000">Premium ($95.000)</option>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label>Talla:</label>
+                        <select class="cam_talla" onchange="actualizar()">
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="2XL">2XL</option>
+                            <option value="3XL">3XL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fila-2">
+                    <div class="campo">
+                        <label>Estilo Cuello (Solo Taller):</label>
+                        <select class="cam_cuello" onchange="actualizar()">
+                            <option value="Cuello Redondo">Cuello Redondo</option>
+                            <option value="Cuello V">Cuello V</option>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label>Colores / Hilos:</label>
+                        <input type="text" class="cam_colores" placeholder="Ej: Negro/Azul, Hilo Azul" oninput="actualizar()">
+                    </div>
+                </div>
+                <div class="campo">
+                    <label>Personalización (Nombre / RH / Bandera):</label>
+                    <input type="text" class="cam_detalle" placeholder="Ej: JUAN - O+ - Bandera Colombia" oninput="actualizar()">
+                </div>
+            `;
+            contenedor.appendChild(div);
+
+            if (datos) {
+                div.querySelector('.cam_linea').value = datos.linea;
+                div.querySelector('.cam_talla').value = datos.talla;
+                div.querySelector('.cam_cuello').value = datos.cuello;
+                div.querySelector('.cam_colores').value = datos.colores;
+                div.querySelector('.cam_detalle').value = datos.detalle;
+            }
+
+            actualizar();
+        }
+
+        function duplicarCamisa(idOriginal) {
+            const cardOriginal = document.getElementById(`camisa_card_${idOriginal}`);
+            const datos = {
+                linea: cardOriginal.querySelector('.cam_linea').value,
+                talla: cardOriginal.querySelector('.cam_talla').value,
+                cuello: cardOriginal.querySelector('.cam_cuello').value,
+                colores: cardOriginal.querySelector('.cam_colores').value,
+                detalle: cardOriginal.querySelector('.cam_detalle').value
+            };
+            agregarCamisa(datos);
+        }
+
+        function agregarCapuchon(datos = null) {
+            contadorCapuchones++;
+            const id = contadorCapuchones;
+            const contenedor = document.getElementById('contenedor_capuchones_inputs');
+
+            const div = document.createElement('div');
+            div.className = 'tarjeta-capuchon-input';
+            div.id = `capuchon_card_${id}`;
+            div.innerHTML = `
+                <div class="cabecera-tarjeta">
+                    <strong style="color:#00b4d8; font-size:0.85rem;">Capuchón #${id}</strong>
+                    <div class="acciones-item">
+                        <button type="button" class="btn-mini btn-dup" onclick="duplicarCapuchon('${id}')">📋 Duplicar</button>
+                        <button type="button" class="btn-mini btn-del" onclick="eliminarPrenda('capuchon_card_${id}')">🗑️ Eliminar</button>
+                    </div>
+                </div>
+                <div class="fila-2">
+                    <div class="campo">
+                        <label>Material / Precio:</label>
+                        <select class="cap_material" onchange="actualizar()">
+                            <option value="Drill" data-precio="16000">Drill ($16.000)</option>
+                            <option value="Dacrón" data-precio="12000">Dacrón ($12.000)</option>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label>Talla:</label>
+                        <select class="cap_talla" onchange="actualizar()">
+                            <option value="Única">Única</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="campo">
+                    <label>Colores / Referencia Visual:</label>
+                    <input type="text" class="cap_colores" placeholder="Ej: Negro con combinación Roja" oninput="actualizar()">
+                </div>
+            `;
+            contenedor.appendChild(div);
+
+            if (datos) {
+                div.querySelector('.cap_material').value = datos.material;
+                div.querySelector('.cap_talla').value = datos.talla;
+                div.querySelector('.cap_colores').value = datos.colores;
+            }
+
+            actualizar();
+        }
+
+        function duplicarCapuchon(idOriginal) {
+            const cardOriginal = document.getElementById(`capuchon_card_${idOriginal}`);
+            const datos = {
+                material: cardOriginal.querySelector('.cap_material').value,
+                talla: cardOriginal.querySelector('.cap_talla').value,
+                colores: cardOriginal.querySelector('.cap_colores').value
+            };
+            agregarCapuchon(datos);
+        }
+
+        function eliminarPrenda(idElemento) {
+            const el = document.getElementById(idElemento);
+            if (el) {
+                el.remove();
+                actualizar();
+            }
+        }
+
+        function actualizar() {
+            const clienteVal = document.getElementById('in_cliente').value || '---';
+            document.getElementById('out_cliente').innerText = clienteVal;
+            document.getElementById('out_taller_cliente').innerText = clienteVal;
+            document.getElementById('out_fecha_abono').innerText = document.getElementById('in_fecha_abono').value || '---';
+
+            // Estado de Abono / Fabricación en Cliente y Taller
+            const estaPendiente = document.getElementById('chk_confirmado').checked;
+            const elEstadoTaller = document.getElementById('out_estado_fabricacion');
+            const elEstadoCliente = document.getElementById('out_estado_cliente');
+
+            if (estaPendiente) {
+                elEstadoTaller.className = 'caja-alerta alerta-pendiente';
+                elEstadoTaller.innerHTML = '⏳ PEDIDO REGISTRADO - PENDIENTE DE CONFIRMACIÓN DE ABONO PARA INICIAR FABRICACIÓN';
+
+                elEstadoCliente.className = 'caja-alerta alerta-pendiente';
+                elEstadoCliente.innerHTML = '⚠️ PENDIENTE DE ABONO: La fabricación iniciará una vez se confirme el abono inicial.';
+            } else {
+                elEstadoTaller.className = 'caja-alerta alerta-listo';
+                elEstadoTaller.innerHTML = '✅ PEDIDO CONFIRMADO Y ABONADO - EN ORDEN DE PRODUCCIÓN';
+
+                elEstadoCliente.className = 'caja-alerta alerta-listo';
+                elEstadoCliente.innerHTML = '✅ PEDIDO CONFIRMADO Y ABONADO - EN PRODUCCIÓN';
+            }
+
+            const abono = parseFloat(document.getElementById('in_abono').value) || 0;
+            document.getElementById('out_abono').innerText = abono.toLocaleString('es-CO');
+
+            let sumaTotal = 0;
+
+            // Procesar Camisas
+            const tarjetasCamisas = document.querySelectorAll('.tarjeta-prenda-input');
+            document.getElementById('out_taller_cant_camisas').innerText = tarjetasCamisas.length;
+            const tbodyCamisasCliente = document.getElementById('out_tabla_camisas_cliente');
+            const tbodyCamisasTaller = document.getElementById('out_tabla_camisas_taller');
+            tbodyCamisasCliente.innerHTML = '';
+            tbodyCamisasTaller.innerHTML = '';
+
+            tarjetasCamisas.forEach((item, index) => {
+                const selectLinea = item.querySelector('.cam_linea');
+                const lineaNombre = selectLinea.value;
+                const precio = parseFloat(selectLinea.options[selectLinea.selectedIndex].getAttribute('data-precio')) || 0;
+                sumaTotal += precio;
+
+                const talla = item.querySelector('.cam_talla').value;
+                const cuello = item.querySelector('.cam_cuello').value;
+                const colores = item.querySelector('.cam_colores').value || '---';
+                const detalle = item.querySelector('.cam_detalle').value || '---';
+
+                tbodyCamisasCliente.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${lineaNombre}</td>
+                        <td>${talla}</td>
+                        <td>${colores}</td>
+                        <td>${detalle}</td>
+                        <td>$${precio.toLocaleString('es-CO')}</td>
+                    </tr>
+                `;
+
+                tbodyCamisasTaller.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${lineaNombre} - ${cuello}</td>
+                        <td><strong>${talla}</strong></td>
+                        <td>${colores}</td>
+                        <td>${detalle}</td>
+                    </tr>
+                `;
+            });
+
+            // Procesar Capuchones
+            const tarjetasCapuchones = document.querySelectorAll('.tarjeta-capuchon-input');
+            document.getElementById('out_taller_cant_capuchones').innerText = tarjetasCapuchones.length;
+            const tbodyCapuchonesCliente = document.getElementById('out_tabla_capuchones_cliente');
+            const tbodyCapuchonesTaller = document.getElementById('out_tabla_capuchones_taller');
+            tbodyCapuchonesCliente.innerHTML = '';
+            tbodyCapuchonesTaller.innerHTML = '';
+
+            tarjetasCapuchones.forEach((item, index) => {
+                const selectMaterial = item.querySelector('.cap_material');
+                const materialNombre = selectMaterial.value;
+                const precio = parseFloat(selectMaterial.options[selectMaterial.selectedIndex].getAttribute('data-precio')) || 0;
+                sumaTotal += precio;
+
+                const talla = item.querySelector('.cap_talla').value;
+                const colores = item.querySelector('.cap_colores').value || '---';
+
+                tbodyCamisasCliente.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>Capuchón en ${materialNombre}</td>
+                        <td>${talla}</td>
+                        <td>${colores}</td>
+                        <td>$${precio.toLocaleString('es-CO')}</td>
+                    </tr>
+                `;
+
+                tbodyCapuchonesTaller.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>Capuchón en ${materialNombre}</td>
+                        <td><strong>${talla}</strong></td>
+                        <td>${colores}</td>
+                    </tr>
+                `;
+            });
+
+            const saldo = sumaTotal - abono;
+            document.getElementById('out_total').innerText = sumaTotal.toLocaleString('es-CO');
+            document.getElementById('out_saldo').innerText = saldo.toLocaleString('es-CO');
+        }
+
+        function cargarFotos(event) {
+            const archivos = event.target.files;
+            const contTaller = document.getElementById('out_fotos_taller');
+            contTaller.innerHTML = '';
+
+            for (let i = 0; i < archivos.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'foto-preview';
+                    contTaller.appendChild(img);
+                }
+                reader.readAsDataURL(archivos[i]);
+            }
+        }
+
+        function descargarImagen(elementId, nombreArchivo) {
+            const elemento = document.getElementById(elementId);
+            
+            html2canvas(elemento, { 
+                scale: 2,
+                logging: false
+            }).then(canvas => {
+                const enlace = document.createElement('a');
+                enlace.download = nombreArchivo + '.png';
+                enlace.href = canvas.toDataURL('image/png');
+                enlace.click();
+            }).catch(err => {
+                alert("Error al descargar la imagen: " + err.message);
+            });
+        }
+
+        function reiniciarFormulario() {
+            if (confirm("¿Deseas limpiar todos los campos para registrar un nuevo pedido?")) {
+                document.getElementById('in_cliente').value = '';
+                document.getElementById('in_fecha_abono').value = '';
+                document.getElementById('in_abono').value = '0';
+                document.getElementById('chk_confirmado').checked = false;
+                document.getElementById('contenedor_camisas_inputs').innerHTML = '';
+                document.getElementById('contenedor_capuchones_inputs').innerHTML = '';
+                document.getElementById('out_fotos_taller').innerHTML = '';
+                contadorCamisas = 0;
+                contadorCapuchones = 0;
+                agregarCamisa();
+            }
+        }
+
+        window.onload = function() {
+            agregarCamisa();
+        };
+    </script>
+</body>
+</html>
