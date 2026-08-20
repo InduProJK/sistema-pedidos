@@ -45,27 +45,51 @@
         .btn-reset { background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
         .btn:hover, .btn-reset:hover { opacity: 0.9; }
 
-        /* Documentos de Captura */
-        .hoja-documento { background: #ffffff; color: #111; padding: 20px; border-radius: 6px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); }
-        .encabezado-doc { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0b0e14; padding-bottom: 10px; margin-bottom: 12px; }
-        .brand-doc { display: flex; align-items: center; gap: 12px; }
-        .svg-logo { width: 45px; height: 45px; }
-        .encabezado-doc h2 { margin: 0; font-size: 1.3rem; color: #0b0e14; font-weight: 900; line-height: 1; }
-        .tag-doc { background: #0b0e14; color: #00e5ff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; height: fit-content; }
+        /* Estilos optimizados para exportación en Hoja Documento */
+        .hoja-documento { 
+            background: #ffffff; 
+            color: #111; 
+            padding: 24px; 
+            border-radius: 6px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); 
+            width: 100%;
+            max-width: 800px;
+            box-sizing: border-box;
+            line-height: 1.4;
+        }
 
-        .tabla-doc { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 10px; }
-        .tabla-doc th, .tabla-doc td { border: 1px solid #cbd5e1; padding: 6px; font-size: 0.75rem; text-align: left; word-break: break-word; }
-        .tabla-doc th { background: #0b0e14; color: #ffffff; }
+        .encabezado-doc { display: table; width: 100%; border-bottom: 3px solid #0b0e14; padding-bottom: 10px; margin-bottom: 12px; }
+        .brand-doc { display: table-cell; vertical-align: middle; }
+        .svg-logo { width: 45px; height: 45px; vertical-align: middle; display: inline-block; }
+        .brand-text { display: inline-block; vertical-align: middle; margin-left: 10px; }
+        .encabezado-doc h2 { margin: 0; font-size: 1.3rem; color: #0b0e14; font-weight: 900; line-height: 1.2; }
+        .tag-doc-cell { display: table-cell; vertical-align: middle; text-align: right; }
+        .tag-doc { background: #0b0e14; color: #00e5ff; padding: 6px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; display: inline-block; }
+
+        .tabla-doc { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 10px; table-layout: fixed; }
+        .tabla-doc th, .tabla-doc td { border: 1px solid #cbd5e1; padding: 8px; font-size: 0.75rem; text-align: left; word-wrap: break-word; vertical-align: top; }
+        .tabla-doc th { background: #0b0e14; color: #ffffff; font-weight: bold; }
 
         .contenedor-fotos-doc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
         .foto-preview { width: 85px; height: 85px; object-fit: cover; border: 1px solid #cbd5e1; border-radius: 4px; }
-        .subtitulo-tabla { background: #f1f5f9; font-weight: bold; font-size: 0.8rem; color: #0f172a; padding: 4px 6px; margin-top: 10px; border-left: 3px solid #00b4d8; }
+        .subtitulo-tabla { background: #f1f5f9; font-weight: bold; font-size: 0.8rem; color: #0f172a; padding: 6px 8px; margin-top: 12px; border-left: 4px solid #00b4d8; }
         
         .caja-alerta { font-size: 0.75rem; font-weight: bold; padding: 8px 12px; border-radius: 4px; margin-top: 8px; margin-bottom: 10px; text-align: center; }
         .alerta-pendiente { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
         .alerta-listo { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         
         .talla-alerta { color: #dc2626; font-weight: bold; background: #fee2e2; padding: 2px 4px; border-radius: 3px; }
+
+        /* Clase auxiliar aplicada temporalmente durante la descarga */
+        .capturando-canvas {
+            width: 800px !important;
+            max-width: 800px !important;
+            position: absolute !important;
+            left: -9999px !important;
+            top: 0 !important;
+            transform: none !important;
+        }
     </style>
 </head>
 <body>
@@ -128,15 +152,17 @@
                             <circle cx="50" cy="50" r="46" stroke="#00e5ff" stroke-width="4" fill="#0b0e14"/>
                             <path d="M30 68 L50 28 L70 68 L58 68 L50 50 L42 68 Z" fill="#00e5ff"/>
                         </svg>
-                        <div>
+                        <div class="brand-text">
                             <h2>REYAND INDUPRO</h2>
                             <small style="font-weight: bold; color: #475569;">Cotización / Confirmación de Pedido</small>
                         </div>
                     </div>
-                    <div class="tag-doc">PEDIDO CLIENTE</div>
+                    <div class="tag-doc-cell">
+                        <div class="tag-doc">PEDIDO CLIENTE</div>
+                    </div>
                 </div>
 
-                <p style="font-size:0.85rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_cliente">---</span> | <strong>Fecha Abono:</strong> <span id="out_fecha_abono">---</span></p>
+                <p style="font-size:0.85rem; margin: 6px 0;"><strong>Cliente:</strong> <span id="out_cliente">---</span> | <strong>Fecha Abono:</strong> <span id="out_fecha_abono">---</span></p>
 
                 <div id="out_estado_cliente" class="caja-alerta alerta-pendiente">
                     ⚠️ PENDIENTE DE ABONO: La fabricación iniciará una vez se confirme el abono inicial.
@@ -147,13 +173,13 @@
                     <table class="tabla-doc">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Línea</th>
-                                <th>Talla</th>
-                                <th>Colores</th>
-                                <th>Bordados Principales</th>
-                                <th>Bordados Extras</th>
-                                <th>Precio Total</th>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 15%;">Línea</th>
+                                <th style="width: 15%;">Talla</th>
+                                <th style="width: 20%;">Colores</th>
+                                <th style="width: 20%;">Bordados Principales</th>
+                                <th style="width: 15%;">Bordados Extras</th>
+                                <th style="width: 10%;">Precio</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_camisas_cliente"></tbody>
@@ -165,23 +191,25 @@
                     <table class="tabla-doc">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Material / Tipo</th>
-                                <th>Talla</th>
-                                <th>Colores / Obs.</th>
-                                <th>Precio</th>
+                                <th style="width: 8%;">#</th>
+                                <th style="width: 32%;">Material / Tipo</th>
+                                <th style="width: 20%;">Talla</th>
+                                <th style="width: 25%;">Colores / Obs.</th>
+                                <th style="width: 15%;">Precio</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_capuchones_cliente"></tbody>
                     </table>
                 </div>
 
-                <div style="background: #f8fafc; padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
-                    <div style="display:flex; justify-space-between;">
-                        <span><strong>Total Pedido:</strong> $<span id="out_total">0</span></span>
-                        <span><strong>Abono:</strong> $<span id="out_abono">0</span></span>
-                        <span style="color: #0284c7; font-weight: bold;">Saldo Pendiente: $<span id="out_saldo">0</span></span>
-                    </div>
+                <div style="background: #f8fafc; padding: 12px; border-radius: 5px; margin-top: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                    <table style="width: 100%; border: none;">
+                        <tr>
+                            <td style="border:none; padding:0;"><strong>Total Pedido:</strong> $<span id="out_total">0</span></td>
+                            <td style="border:none; padding:0;"><strong>Abono:</strong> $<span id="out_abono">0</span></td>
+                            <td style="border:none; padding:0; text-align:right; color: #0284c7; font-weight: bold;">Saldo Pendiente: $<span id="out_saldo">0</span></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
@@ -193,15 +221,17 @@
                             <circle cx="50" cy="50" r="46" stroke="#00b4d8" stroke-width="4" fill="#0b0e14"/>
                             <path d="M30 68 L50 28 L70 68 L58 68 L50 50 L42 68 Z" fill="#00b4d8"/>
                         </svg>
-                        <div>
+                        <div class="brand-text">
                             <h2>REYAND INDUPRO - TALLER</h2>
                             <small style="font-weight: bold; color: #475569;">Orden Técnica de Producción</small>
                         </div>
                     </div>
-                    <div class="tag-doc" style="background: #00b4d8; color: #0b0e14;">ORDEN TALLER</div>
+                    <div class="tag-doc-cell">
+                        <div class="tag-doc" style="background: #00b4d8; color: #0b0e14;">ORDEN TALLER</div>
+                    </div>
                 </div>
 
-                <p style="font-size:0.85rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_taller_cliente">---</span> | <strong>Camisas:</strong> <span id="out_taller_cant_camisas">0</span> | <strong>Capuchones:</strong> <span id="out_taller_cant_capuchones">0</span></p>
+                <p style="font-size:0.85rem; margin: 6px 0;"><strong>Cliente:</strong> <span id="out_taller_cliente">---</span> | <strong>Camisas:</strong> <span id="out_taller_cant_camisas">0</span> | <strong>Capuchones:</strong> <span id="out_taller_cant_capuchones">0</span></p>
 
                 <div id="out_estado_fabricacion" class="caja-alerta alerta-pendiente">
                     ⏳ PEDIDO REGISTRADO - PENDIENTE DE CONFIRMACIÓN DE ABONO PARA INICIAR FABRICACIÓN
@@ -212,12 +242,12 @@
                     <table class="tabla-doc">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Línea / Modelo</th>
-                                <th>Talla</th>
-                                <th>Colores Prenda / Hilos</th>
-                                <th>Bordados Principales</th>
-                                <th>Bordados Adicionales</th>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 20%;">Línea / Modelo</th>
+                                <th style="width: 15%;">Talla</th>
+                                <th style="width: 20%;">Colores Prenda / Hilos</th>
+                                <th style="width: 20%;">Bordados Principales</th>
+                                <th style="width: 20%;">Bordados Adicionales</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_camisas_taller"></tbody>
@@ -229,10 +259,10 @@
                     <table class="tabla-doc">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Material</th>
-                                <th>Talla</th>
-                                <th>Colores / Especificaciones</th>
+                                <th style="width: 8%;">#</th>
+                                <th style="width: 32%;">Material</th>
+                                <th style="width: 20%;">Talla</th>
+                                <th style="width: 40%;">Colores / Especificaciones</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_capuchones_taller"></tbody>
@@ -303,7 +333,7 @@
                 </div>
 
                 <div style="background: #18202f; padding: 10px; border-radius: 5px; margin-top: 8px; border: 1px solid #1e293b;">
-                    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 8px;">
+                    <div style="display:flex; justify-space-between; align-items:center; margin-bottom: 8px;">
                         <label style="color:#00e5ff; margin:0;">Bordados Principales:</label>
                         <label style="font-size:0.75rem; color:#fff; display:flex; align-items:center; gap:4px; cursor:pointer;">
                             <input type="checkbox" class="cam_sin_bordado" style="width:auto;" onchange="toggleBordados('${id}')"> Sin bordados
@@ -511,7 +541,7 @@
                     if (rh) partes.push(`RH: ${rh}`);
                     if (ban) partes.push(`Bandera: ${ban}`);
                     
-                    textoBordadosPrincipales = partes.length > 0 ? partes.join(' | ') : 'Sin especificación';
+                    textoBordadosPrincipales = partes.length > 0 ? partes.join('<br>') : 'Sin especificación';
                 }
 
                 const bordadoExtraTxt = item.querySelector('.cam_bordado_extra').value;
@@ -535,7 +565,7 @@
                 tbodyCamisasTaller.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
-                        <td>${lineaNombre} - ${modelo}</td>
+                        <td>${lineaNombre}<br><small style="color:#64748b;">${modelo}</small></td>
                         <td>${tallaFormateada}</td>
                         <td>${colores}</td>
                         <td>${textoBordadosPrincipales}</td>
@@ -605,17 +635,29 @@
 
         function descargarImagen(elementId, nombreArchivo) {
             const elemento = document.getElementById(elementId);
-            
-            html2canvas(elemento, { 
+
+            // Clonar elemento temporalmente para renderizarlo en un contenedor estándar de 800px sin problemas de Flexbox
+            const clon = elemento.cloneNode(true);
+            clon.classList.add('capturando-canvas');
+            document.body.appendChild(clon);
+
+            html2canvas(clon, { 
                 scale: 2,
-                logging: false
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                windowWidth: 800,
+                width: 800
             }).then(canvas => {
                 const enlace = document.createElement('a');
                 enlace.download = nombreArchivo + '.png';
                 enlace.href = canvas.toDataURL('image/png');
                 enlace.click();
+                document.body.removeChild(clon);
             }).catch(err => {
                 alert("Error al descargar la imagen: " + err.message);
+                if (document.body.contains(clon)) {
+                    document.body.removeChild(clon);
+                }
             });
         }
 
