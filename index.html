@@ -24,6 +24,8 @@
         
         .fila-2 { display: flex; gap: 8px; }
         .fila-2 > div { flex: 1; }
+        .fila-3 { display: flex; gap: 8px; }
+        .fila-3 > div { flex: 1; }
 
         .tarjeta-prenda-input { background: #0b0e14; border-left: 4px solid #00e5ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
         .tarjeta-capuchon-input { background: #0b0e14; border-left: 4px solid #00b4d8; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
@@ -62,6 +64,8 @@
         .caja-alerta { font-size: 0.75rem; font-weight: bold; padding: 8px 12px; border-radius: 4px; margin-top: 8px; margin-bottom: 10px; text-align: center; }
         .alerta-pendiente { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
         .alerta-listo { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        
+        .talla-alerta { color: #dc2626; font-weight: bold; background: #fee2e2; padding: 2px 4px; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -83,7 +87,6 @@
                 <div class="campo"><label>Abono ($):</label><input type="number" id="in_abono" value="0" oninput="actualizar()"></div>
             </div>
 
-            <!-- Checkbox de Confirmación de Abono / Fabricación -->
             <div class="campo" style="background: #0b0e14; padding: 10px; border-radius: 4px; border: 1px solid #1e293b; margin-top: 10px;">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fff;">
                     <input type="checkbox" id="chk_confirmado" style="width: auto;" onchange="actualizar()">
@@ -135,9 +138,8 @@
 
                 <p style="font-size:0.85rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_cliente">---</span> | <strong>Fecha Abono:</strong> <span id="out_fecha_abono">---</span></p>
 
-                <!-- Estado para el Cliente -->
                 <div id="out_estado_cliente" class="caja-alerta alerta-pendiente">
-                    ⚠️ PENDIENTE DE ABONO: La fabricación iniciará una vez confirmado el pago inicial.
+                    ⚠️ PENDIENTE DE ABONO: La fabricación iniciará una vez se confirme el abono inicial.
                 </div>
 
                 <div id="seccion_out_camisas_cliente">
@@ -149,8 +151,9 @@
                                 <th>Línea</th>
                                 <th>Talla</th>
                                 <th>Colores</th>
-                                <th>Personalización (Nombre/RH/Bandera)</th>
-                                <th>Precio</th>
+                                <th>Bordados Principales</th>
+                                <th>Bordados Extras</th>
+                                <th>Precio Total</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_camisas_cliente"></tbody>
@@ -174,7 +177,7 @@
                 </div>
 
                 <div style="background: #f8fafc; padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
-                    <div style="display:flex; justify-content: space-between;">
+                    <div style="display:flex; justify-space-between;">
                         <span><strong>Total Pedido:</strong> $<span id="out_total">0</span></span>
                         <span><strong>Abono:</strong> $<span id="out_abono">0</span></span>
                         <span style="color: #0284c7; font-weight: bold;">Saldo Pendiente: $<span id="out_saldo">0</span></span>
@@ -210,10 +213,11 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Línea / Cuello</th>
+                                <th>Línea / Modelo</th>
                                 <th>Talla</th>
                                 <th>Colores Prenda / Hilos</th>
-                                <th>Detalle Bordados (Nombre, RH, Bandera)</th>
+                                <th>Bordados Principales</th>
+                                <th>Bordados Adicionales</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_camisas_taller"></tbody>
@@ -265,7 +269,7 @@
                 </div>
                 <div class="fila-2">
                     <div class="campo">
-                        <label>Línea / Precio:</label>
+                        <label>Línea / Precio Base:</label>
                         <select class="cam_linea" onchange="actualizar()">
                             <option value="Estándar" data-precio="85000">Estándar ($85.000)</option>
                             <option value="Premium" data-precio="95000">Premium ($95.000)</option>
@@ -274,6 +278,7 @@
                     <div class="campo">
                         <label>Talla:</label>
                         <select class="cam_talla" onchange="actualizar()">
+                            <option value="SIN CONFIRMAR">⚠️ SIN CONFIRMAR</option>
                             <option value="S">S</option>
                             <option value="M">M</option>
                             <option value="L">L</option>
@@ -285,20 +290,43 @@
                 </div>
                 <div class="fila-2">
                     <div class="campo">
-                        <label>Estilo Cuello (Solo Taller):</label>
-                        <select class="cam_cuello" onchange="actualizar()">
-                            <option value="Cuello Redondo">Cuello Redondo</option>
-                            <option value="Cuello V">Cuello V</option>
+                        <label>Modelo:</label>
+                        <select class="cam_modelo" onchange="actualizar()">
+                            <option value="Modelo V">Modelo V</option>
+                            <option value="Modelo Redondo">Modelo Redondo</option>
                         </select>
                     </div>
                     <div class="campo">
-                        <label>Colores / Hilos:</label>
+                        <label>Colores Prenda / Hilos:</label>
                         <input type="text" class="cam_colores" placeholder="Ej: Negro/Azul, Hilo Azul" oninput="actualizar()">
                     </div>
                 </div>
-                <div class="campo">
-                    <label>Personalización (Nombre / RH / Bandera):</label>
-                    <input type="text" class="cam_detalle" placeholder="Ej: JUAN - O+ - Bandera Colombia" oninput="actualizar()">
+
+                <div style="background: #18202f; padding: 10px; border-radius: 5px; margin-top: 8px; border: 1px solid #1e293b;">
+                    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 8px;">
+                        <label style="color:#00e5ff; margin:0;">Bordados Principales:</label>
+                        <label style="font-size:0.75rem; color:#fff; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                            <input type="checkbox" class="cam_sin_bordado" style="width:auto;" onchange="toggleBordados('${id}')"> Sin bordados
+                        </label>
+                    </div>
+
+                    <div id="bloque_bordados_${id}">
+                        <div class="fila-3">
+                            <div class="campo"><label>Nombre:</label><input type="text" class="cam_nombre" placeholder="Ej: JUAN" oninput="actualizar()"></div>
+                            <div class="campo"><label>RH:</label><input type="text" class="cam_rh" placeholder="Ej: O+" oninput="actualizar()"></div>
+                            <div class="campo"><label>Bandera:</label><input type="text" class="cam_bandera" placeholder="Ej: Colombia" oninput="actualizar()"></div>
+                        </div>
+                    </div>
+
+                    <label style="color:#00e5ff; margin-top:8px;">Bordado Adicional / Diseño Especial:</label>
+                    <div class="fila-2">
+                        <div class="campo" style="flex:2;">
+                            <input type="text" class="cam_bordado_extra" placeholder="Ej: Logo Empresa en Manga / Diseño Especial" oninput="actualizar()">
+                        </div>
+                        <div class="campo" style="flex:1;">
+                            <input type="number" class="cam_precio_extra" placeholder="Precio ($)" value="0" oninput="actualizar()">
+                        </div>
+                    </div>
                 </div>
             `;
             contenedor.appendChild(div);
@@ -306,11 +334,29 @@
             if (datos) {
                 div.querySelector('.cam_linea').value = datos.linea;
                 div.querySelector('.cam_talla').value = datos.talla;
-                div.querySelector('.cam_cuello').value = datos.cuello;
+                div.querySelector('.cam_modelo').value = datos.modelo;
                 div.querySelector('.cam_colores').value = datos.colores;
-                div.querySelector('.cam_detalle').value = datos.detalle;
+                div.querySelector('.cam_sin_bordado').checked = datos.sinBordado;
+                div.querySelector('.cam_nombre').value = datos.nombre;
+                div.querySelector('.cam_rh').value = datos.rh;
+                div.querySelector('.cam_bandera').value = datos.bandera;
+                div.querySelector('.cam_bordado_extra').value = datos.bordadoExtra;
+                div.querySelector('.cam_precio_extra').value = datos.precioExtra;
+                toggleBordados(id);
             }
 
+            actualizar();
+        }
+
+        function toggleBordados(id) {
+            const card = document.getElementById(`camisa_card_${id}`);
+            const sinBordado = card.querySelector('.cam_sin_bordado').checked;
+            const bloque = document.getElementById(`bloque_bordados_${id}`);
+            if (sinBordado) {
+                bloque.style.display = 'none';
+            } else {
+                bloque.style.display = 'block';
+            }
             actualizar();
         }
 
@@ -319,9 +365,14 @@
             const datos = {
                 linea: cardOriginal.querySelector('.cam_linea').value,
                 talla: cardOriginal.querySelector('.cam_talla').value,
-                cuello: cardOriginal.querySelector('.cam_cuello').value,
+                modelo: cardOriginal.querySelector('.cam_modelo').value,
                 colores: cardOriginal.querySelector('.cam_colores').value,
-                detalle: cardOriginal.querySelector('.cam_detalle').value
+                sinBordado: cardOriginal.querySelector('.cam_sin_bordado').checked,
+                nombre: cardOriginal.querySelector('.cam_nombre').value,
+                rh: cardOriginal.querySelector('.cam_rh').value,
+                bandera: cardOriginal.querySelector('.cam_bandera').value,
+                bordadoExtra: cardOriginal.querySelector('.cam_bordado_extra').value,
+                precioExtra: cardOriginal.querySelector('.cam_precio_extra').value
             };
             agregarCamisa(datos);
         }
@@ -354,6 +405,7 @@
                         <label>Talla:</label>
                         <select class="cap_talla" onchange="actualizar()">
                             <option value="Única">Única</option>
+                            <option value="SIN CONFIRMAR">⚠️ SIN CONFIRMAR</option>
                             <option value="S">S</option>
                             <option value="M">M</option>
                             <option value="L">L</option>
@@ -401,7 +453,6 @@
             document.getElementById('out_taller_cliente').innerText = clienteVal;
             document.getElementById('out_fecha_abono').innerText = document.getElementById('in_fecha_abono').value || '---';
 
-            // Estado de Abono / Fabricación en Cliente y Taller
             const estaPendiente = document.getElementById('chk_confirmado').checked;
             const elEstadoTaller = document.getElementById('out_estado_fabricacion');
             const elEstadoCliente = document.getElementById('out_estado_cliente');
@@ -425,7 +476,6 @@
 
             let sumaTotal = 0;
 
-            // Procesar Camisas
             const tarjetasCamisas = document.querySelectorAll('.tarjeta-prenda-input');
             document.getElementById('out_taller_cant_camisas').innerText = tarjetasCamisas.length;
             const tbodyCamisasCliente = document.getElementById('out_tabla_camisas_cliente');
@@ -436,37 +486,64 @@
             tarjetasCamisas.forEach((item, index) => {
                 const selectLinea = item.querySelector('.cam_linea');
                 const lineaNombre = selectLinea.value;
-                const precio = parseFloat(selectLinea.options[selectLinea.selectedIndex].getAttribute('data-precio')) || 0;
-                sumaTotal += precio;
+                const precioBase = parseFloat(selectLinea.options[selectLinea.selectedIndex].getAttribute('data-precio')) || 0;
+                
+                const precioExtra = parseFloat(item.querySelector('.cam_precio_extra').value) || 0;
+                const precioCamisaTotal = precioBase + precioExtra;
+                sumaTotal += precioCamisaTotal;
 
                 const talla = item.querySelector('.cam_talla').value;
-                const cuello = item.querySelector('.cam_cuello').value;
+                const tallaFormateada = (talla === 'SIN CONFIRMAR') ? '<span class="talla-alerta">⚠️ SIN CONFIRMAR</span>' : `<strong>${talla}</strong>`;
+
+                const modelo = item.querySelector('.cam_modelo').value;
                 const colores = item.querySelector('.cam_colores').value || '---';
-                const detalle = item.querySelector('.cam_detalle').value || '---';
+
+                const sinBordado = item.querySelector('.cam_sin_bordado').checked;
+                let textoBordadosPrincipales = 'Sin bordado';
+
+                if (!sinBordado) {
+                    const nom = item.querySelector('.cam_nombre').value;
+                    const rh = item.querySelector('.cam_rh').value;
+                    const ban = item.querySelector('.cam_bandera').value;
+                    
+                    let partes = [];
+                    if (nom) partes.push(`Nombre: ${nom}`);
+                    if (rh) partes.push(`RH: ${rh}`);
+                    if (ban) partes.push(`Bandera: ${ban}`);
+                    
+                    textoBordadosPrincipales = partes.length > 0 ? partes.join(' | ') : 'Sin especificación';
+                }
+
+                const bordadoExtraTxt = item.querySelector('.cam_bordado_extra').value;
+                let textoExtra = 'N/A';
+                if (bordadoExtraTxt) {
+                    textoExtra = `${bordadoExtraTxt} (+ $${precioExtra.toLocaleString('es-CO')})`;
+                }
 
                 tbodyCamisasCliente.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${lineaNombre}</td>
-                        <td>${talla}</td>
+                        <td>${tallaFormateada}</td>
                         <td>${colores}</td>
-                        <td>${detalle}</td>
-                        <td>$${precio.toLocaleString('es-CO')}</td>
+                        <td>${textoBordadosPrincipales}</td>
+                        <td>${textoExtra}</td>
+                        <td>$${precioCamisaTotal.toLocaleString('es-CO')}</td>
                     </tr>
                 `;
 
                 tbodyCamisasTaller.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
-                        <td>${lineaNombre} - ${cuello}</td>
-                        <td><strong>${talla}</strong></td>
+                        <td>${lineaNombre} - ${modelo}</td>
+                        <td>${tallaFormateada}</td>
                         <td>${colores}</td>
-                        <td>${detalle}</td>
+                        <td>${textoBordadosPrincipales}</td>
+                        <td>${textoExtra}</td>
                     </tr>
                 `;
             });
 
-            // Procesar Capuchones
             const tarjetasCapuchones = document.querySelectorAll('.tarjeta-capuchon-input');
             document.getElementById('out_taller_cant_capuchones').innerText = tarjetasCapuchones.length;
             const tbodyCapuchonesCliente = document.getElementById('out_tabla_capuchones_cliente');
@@ -481,13 +558,14 @@
                 sumaTotal += precio;
 
                 const talla = item.querySelector('.cap_talla').value;
+                const tallaFormateada = (talla === 'SIN CONFIRMAR') ? '<span class="talla-alerta">⚠️ SIN CONFIRMAR</span>' : `<strong>${talla}</strong>`;
                 const colores = item.querySelector('.cap_colores').value || '---';
 
-                tbodyCamisasCliente.innerHTML += `
+                tbodyCapuchonesCliente.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>Capuchón en ${materialNombre}</td>
-                        <td>${talla}</td>
+                        <td>${tallaFormateada}</td>
                         <td>${colores}</td>
                         <td>$${precio.toLocaleString('es-CO')}</td>
                     </tr>
@@ -497,7 +575,7 @@
                     <tr>
                         <td>${index + 1}</td>
                         <td>Capuchón en ${materialNombre}</td>
-                        <td><strong>${talla}</strong></td>
+                        <td>${tallaFormateada}</td>
                         <td>${colores}</td>
                     </tr>
                 `;
