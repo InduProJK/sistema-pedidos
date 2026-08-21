@@ -46,7 +46,7 @@
         .btn-reset { background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
         .btn:hover, .btn-reset:hover { opacity: 0.9; }
 
-        /* Estilos Documento PDF optimizados para renderizado */
+        /* Estilos Documento PDF optimizados */
         .hoja-documento { 
             background: #ffffff; 
             color: #111111; 
@@ -81,8 +81,29 @@
         .alerta-listo { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         
         .talla-alerta { color: #dc2626; font-weight: bold; background: #fee2e2; padding: 1px 3px; border-radius: 3px; }
-        .contenedor-preview-input { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
-        .img-preview-input { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; border: 1px solid #00e5ff; }
+        
+        /* Previsualización de Fotos en Formulario con botón Eliminar (X) */
+        .contenedor-preview-input { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .item-foto-preview { position: relative; display: inline-block; }
+        .img-preview-input { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #00e5ff; display: block; }
+        .btn-del-foto { 
+            position: absolute; 
+            top: -5px; 
+            right: -5px; 
+            background: #ef4444; 
+            color: #ffffff; 
+            border: 1px solid #ffffff; 
+            border-radius: 50%; 
+            width: 18px; 
+            height: 18px; 
+            font-size: 10px; 
+            font-weight: bold; 
+            line-height: 16px; 
+            text-align: center; 
+            cursor: pointer; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .btn-del-foto:hover { background: #dc2626; transform: scale(1.1); }
     </style>
 </head>
 <body>
@@ -268,6 +289,22 @@
         let contadorCapuchones = 0;
         let fotosCamisas = {};
 
+        function cambiarPrecioBaseCamisa(id) {
+            const card = document.getElementById(`camisa_card_${id}`);
+            const selectLinea = card.querySelector('.cam_linea');
+            const precioSugerido = selectLinea.options[selectLinea.selectedIndex].getAttribute('data-precio');
+            card.querySelector('.cam_precio_base').value = precioSugerido;
+            actualizar();
+        }
+
+        function cambiarPrecioBaseCapuchon(id) {
+            const card = document.getElementById(`capuchon_card_${id}`);
+            const selectMaterial = card.querySelector('.cap_material');
+            const precioSugerido = selectMaterial.options[selectMaterial.selectedIndex].getAttribute('data-precio');
+            card.querySelector('.cap_precio_base').value = precioSugerido;
+            actualizar();
+        }
+
         function agregarCamisa(datos = null) {
             contadorCamisas++;
             const id = contadorCamisas;
@@ -286,13 +323,17 @@
                         <button type="button" class="btn-mini btn-del" onclick="eliminarPrenda('camisa_card_${id}', '${id}')">🗑️ Eliminar</button>
                     </div>
                 </div>
-                <div class="fila-2">
+                <div class="fila-3">
                     <div class="campo">
-                        <label>Línea / Precio Base:</label>
-                        <select class="cam_linea" onchange="actualizar()">
-                            <option value="Estándar" data-precio="85000">Estándar ($85.000)</option>
-                            <option value="Premium" data-precio="95000">Premium ($95.000)</option>
+                        <label>Línea:</label>
+                        <select class="cam_linea" onchange="cambiarPrecioBaseCamisa('${id}')">
+                            <option value="Estándar" data-precio="85000">Estándar</option>
+                            <option value="Premium" data-precio="95000">Premium</option>
                         </select>
+                    </div>
+                    <div class="campo">
+                        <label>Precio Unitario ($):</label>
+                        <input type="number" class="cam_precio_base" value="85000" oninput="actualizar()">
                     </div>
                     <div class="campo">
                         <label>Talla:</label>
@@ -349,7 +390,7 @@
                             <input type="text" class="cam_bordado_extra" placeholder="Ej: Logo Empresa en Manga" oninput="actualizar()">
                         </div>
                         <div class="campo" style="flex:1;">
-                            <input type="number" class="cam_precio_extra" placeholder="Precio ($)" value="0" oninput="actualizar()">
+                            <input type="number" class="cam_precio_extra" placeholder="Precio Extra ($)" value="0" oninput="actualizar()">
                         </div>
                     </div>
                 </div>
@@ -358,6 +399,7 @@
 
             if (datos) {
                 div.querySelector('.cam_linea').value = datos.linea;
+                div.querySelector('.cam_precio_base').value = datos.precioBase;
                 div.querySelector('.cam_talla').value = datos.talla;
                 div.querySelector('.cam_modelo').value = datos.modelo;
                 div.querySelector('.cam_colores').value = datos.colores;
@@ -399,9 +441,22 @@
         function renderizarPreviewsInput(id) {
             const previewContainer = document.getElementById(`preview_input_${id}`);
             previewContainer.innerHTML = '';
-            fotosCamisas[id].forEach((src) => {
-                previewContainer.innerHTML += `<img src="${src}" class="img-preview-input">`;
+            fotosCamisas[id].forEach((src, index) => {
+                previewContainer.innerHTML += `
+                    <div class="item-foto-preview">
+                        <img src="${src}" class="img-preview-input">
+                        <span class="btn-del-foto" onclick="eliminarFoto('${id}', ${index})" title="Eliminar foto">✕</span>
+                    </div>
+                `;
             });
+        }
+
+        function eliminarFoto(idCamisa, indexFoto) {
+            if (fotosCamisas[idCamisa]) {
+                fotosCamisas[idCamisa].splice(indexFoto, 1);
+                renderizarPreviewsInput(idCamisa);
+                actualizar();
+            }
         }
 
         function toggleBordados(id) {
@@ -416,6 +471,7 @@
             const cardOriginal = document.getElementById(`camisa_card_${idOriginal}`);
             const datos = {
                 linea: cardOriginal.querySelector('.cam_linea').value,
+                precioBase: cardOriginal.querySelector('.cam_precio_base').value,
                 talla: cardOriginal.querySelector('.cam_talla').value,
                 modelo: cardOriginal.querySelector('.cam_modelo').value,
                 colores: cardOriginal.querySelector('.cam_colores').value,
@@ -446,13 +502,17 @@
                         <button type="button" class="btn-mini btn-del" onclick="eliminarPrenda('capuchon_card_${id}')">🗑️ Eliminar</button>
                     </div>
                 </div>
-                <div class="fila-2">
+                <div class="fila-3">
                     <div class="campo">
-                        <label>Material / Precio:</label>
-                        <select class="cap_material" onchange="actualizar()">
-                            <option value="Drill" data-precio="16000">Drill ($16.000)</option>
-                            <option value="Dacrón" data-precio="12000">Dacrón ($12.000)</option>
+                        <label>Material:</label>
+                        <select class="cap_material" onchange="cambiarPrecioBaseCapuchon('${id}')">
+                            <option value="Drill" data-precio="16000">Drill</option>
+                            <option value="Dacrón" data-precio="12000">Dacrón</option>
                         </select>
+                    </div>
+                    <div class="campo">
+                        <label>Precio Unitario ($):</label>
+                        <input type="number" class="cap_precio_base" value="16000" oninput="actualizar()">
                     </div>
                     <div class="campo">
                         <label>Talla:</label>
@@ -475,6 +535,7 @@
 
             if (datos) {
                 div.querySelector('.cap_material').value = datos.material;
+                div.querySelector('.cap_precio_base').value = datos.precioBase;
                 div.querySelector('.cap_talla').value = datos.talla;
                 div.querySelector('.cap_colores').value = datos.colores;
             }
@@ -486,6 +547,7 @@
             const cardOriginal = document.getElementById(`capuchon_card_${idOriginal}`);
             const datos = {
                 material: cardOriginal.querySelector('.cap_material').value,
+                precioBase: cardOriginal.querySelector('.cap_precio_base').value,
                 talla: cardOriginal.querySelector('.cap_talla').value,
                 colores: cardOriginal.querySelector('.cap_colores').value
             };
@@ -543,7 +605,7 @@
                 const idCamisaStr = item.id.replace('camisa_card_', '');
                 const selectLinea = item.querySelector('.cam_linea');
                 const lineaNombre = selectLinea.value;
-                const precioBase = parseFloat(selectLinea.options[selectLinea.selectedIndex].getAttribute('data-precio')) || 0;
+                const precioBase = parseFloat(item.querySelector('.cam_precio_base').value) || 0;
                 
                 const precioExtra = parseFloat(item.querySelector('.cam_precio_extra').value) || 0;
                 const precioCamisaTotal = precioBase + precioExtra;
@@ -620,7 +682,7 @@
             tarjetasCapuchones.forEach((item, index) => {
                 const selectMaterial = item.querySelector('.cap_material');
                 const materialNombre = selectMaterial.value;
-                const precio = parseFloat(selectMaterial.options[selectMaterial.selectedIndex].getAttribute('data-precio')) || 0;
+                const precio = parseFloat(item.querySelector('.cap_precio_base').value) || 0;
                 sumaTotal += precio;
 
                 const talla = item.querySelector('.cap_talla').value;
@@ -663,7 +725,6 @@
             const clienteLimpio = cliente.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]/g, '_');
             const nombreArchivo = `${tipoDoc}_${clienteLimpio}.pdf`;
 
-            // Configuración optimizada para navegadores móviles y renderizado ligero
             const opciones = {
                 margin:       [8, 8, 8, 8],
                 filename:     nombreArchivo,
@@ -674,7 +735,7 @@
                     allowTaint: true,
                     scrollX: 0,
                     scrollY: 0,
-                    windowWidth: 794 // Forzar ancho estándar de escritorio durante captura
+                    windowWidth: 794
                 },
                 jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
             };
