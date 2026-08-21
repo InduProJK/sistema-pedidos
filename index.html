@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Pedidos - Reyand InduPro</title>
-    <!-- Librería para generar PDFs profesionales -->
+    <!-- Librería html2pdf.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -46,16 +46,18 @@
         .btn-reset { background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
         .btn:hover, .btn-reset:hover { opacity: 0.9; }
 
-        /* Estilos Documento PDF */
+        /* Estilos Documento PDF optimizados para renderizado */
         .hoja-documento { 
             background: #ffffff; 
-            color: #111; 
+            color: #111111; 
             padding: 20px; 
             border-radius: 6px; 
             margin-bottom: 20px; 
             box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); 
             width: 100%;
+            max-width: 100%;
             box-sizing: border-box;
+            overflow: hidden;
         }
 
         .encabezado-doc { display: table; width: 100%; border-bottom: 2px solid #0b0e14; padding-bottom: 8px; margin-bottom: 10px; }
@@ -70,7 +72,6 @@
         .tabla-doc th, .tabla-doc td { border: 1px solid #cbd5e1; padding: 6px; font-size: 0.7rem; text-align: left; word-wrap: break-word; vertical-align: middle; }
         .tabla-doc th { background: #0b0e14; color: #ffffff; font-weight: bold; }
 
-        /* Contenedor e imágenes múltiples en tablas y previews */
         .galeria-fotos { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
         .foto-tabla { width: 45px; height: 45px; object-fit: cover; border: 1px solid #94a3b8; border-radius: 4px; display: block; }
         .subtitulo-tabla { background: #f1f5f9; font-weight: bold; font-size: 0.75rem; color: #0f172a; padding: 4px 6px; margin-top: 10px; border-left: 3px solid #00b4d8; }
@@ -265,12 +266,12 @@
     <script>
         let contadorCamisas = 0;
         let contadorCapuchones = 0;
-        let fotosCamisas = {}; // Estructura: { 1: ['base64_1', 'base64_2'], 2: [...] }
+        let fotosCamisas = {};
 
         function agregarCamisa(datos = null) {
             contadorCamisas++;
             const id = contadorCamisas;
-            fotosCamisas[id] = []; // Inicializar arreglo para múltiples fotos por camisa
+            fotosCamisas[id] = [];
             
             const contenedor = document.getElementById('contenedor_camisas_inputs');
             
@@ -321,13 +322,13 @@
                 </div>
 
                 <div class="campo" style="margin-top: 5px;">
-                    <label>Fotos de Referencia / Diseños (Selección Múltiple):</label>
+                    <label>Fotos de Referencia / Diseños:</label>
                     <input type="file" accept="image/*" multiple onchange="cargarFotoCamisa(event, '${id}')">
                     <div id="preview_input_${id}" class="contenedor-preview-input"></div>
                 </div>
 
                 <div style="background: #18202f; padding: 10px; border-radius: 5px; margin-top: 8px; border: 1px solid #1e293b;">
-                    <div style="display:flex; justify- space-between; align-items:center; margin-bottom: 8px;">
+                    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 8px;">
                         <label style="color:#00e5ff; margin:0;">Bordados Principales:</label>
                         <label style="font-size:0.75rem; color:#fff; display:flex; align-items:center; gap:4px; cursor:pointer;">
                             <input type="checkbox" class="cam_sin_bordado" style="width:auto;" onchange="toggleBordados('${id}')"> Sin bordados
@@ -662,11 +663,19 @@
             const clienteLimpio = cliente.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]/g, '_');
             const nombreArchivo = `${tipoDoc}_${clienteLimpio}.pdf`;
 
+            // Configuración optimizada para navegadores móviles y renderizado ligero
             const opciones = {
-                margin:       [10, 10, 10, 10],
+                margin:       [8, 8, 8, 8],
                 filename:     nombreArchivo,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
+                image:        { type: 'jpeg', quality: 0.95 },
+                html2canvas:  { 
+                    scale: 1.5, 
+                    useCORS: true, 
+                    allowTaint: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: 794 // Forzar ancho estándar de escritorio durante captura
+                },
                 jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
             };
 
