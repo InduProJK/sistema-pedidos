@@ -35,17 +35,19 @@
         .btn-del { background: #ef4444; color: #fff; }
         .btn-add { background: #10b981; color: #fff; padding: 5px 10px; font-size: 0.75rem; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
         .btn-mini:hover, .btn-add:hover { opacity: 0.85; }
-        .acciones-btn { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; color: #0b0e14; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; transition: 0.2s; }
+        .acciones-btn { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .btn { flex: 1; min-width: 140px; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; color: #0b0e14; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; transition: 0.2s; }
         .btn-cliente { background: #00b4d8; }
         .btn-taller { background: #00e5ff; }
+        .btn-cotizacion { background: #f59e0b; color: #fff; }
+        .btn-cuenta { background: #10b981; color: #fff; }
         .btn-reset { background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
         .btn:hover, .btn-reset:hover { opacity: 0.9; }
 
         .hoja-documento { 
             background: #ffffff; 
             color: #111111; 
-            padding: 20px; 
+            padding: 25px; 
             border-radius: 6px; 
             margin-bottom: 20px; 
             box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); 
@@ -95,6 +97,14 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
         .btn-del-foto:hover { background: #dc2626; transform: scale(1.1); }
+
+        /* ESTILOS ESPECÍFICOS COTIZACIÓN Y CUENTA DE COBRO */
+        .cot-titulo { text-align: center; font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .cot-tabla-vendedor { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .cot-tabla-vendedor td { border: 1px solid #000; padding: 6px 10px; font-size: 0.75rem; vertical-align: top; }
+        .cot-firma { margin-top: 40px; font-size: 0.8rem; font-weight: bold; line-height: 1.4; }
+        .cuenta-cobro-box { text-align: center; padding: 20px 10px; font-size: 0.85rem; line-height: 1.8; color: #000; }
+        .cuenta-cobro-box h3 { border: none; color: #000; text-align: center; margin-bottom: 15px; font-size: 1rem; text-transform: none; display: block; }
     </style>
 </head>
 <body>
@@ -110,7 +120,7 @@
             </h3>
             <div class="campo"><label>Nombre del Cliente / Empresa:</label><input type="text" id="in_cliente" oninput="actualizar()"></div>
             <div class="fila-2">
-                <div class="campo"><label>Fecha Abono:</label><input type="date" id="in_fecha_abono" oninput="actualizar()"></div>
+                <div class="campo"><label>Fecha Abono / Emisión:</label><input type="date" id="in_fecha_abono" oninput="actualizar()"></div>
                 <div class="campo"><label>Abono ($):</label><input type="number" id="in_abono" value="0" oninput="actualizar()"></div>
             </div>
             <div class="campo" style="background: #0b0e14; padding: 10px; border-radius: 4px; border: 1px solid #1e293b; margin-top: 10px;">
@@ -119,6 +129,32 @@
                     <span>Pedido tomado (Pendiente de abono / Autorización para fabricar)</span>
                 </label>
             </div>
+
+            <!-- SECCIÓN OPCIONAL COTIZACIÓN / CUENTA DE COBRO -->
+            <h3>
+                1B. Documentos Formales (Opcional)
+            </h3>
+            <div class="campo" style="background: #18202f; padding: 10px; border-radius: 4px; border: 1px solid #00e5ff; margin-bottom: 12px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #00e5ff; font-weight: bold;">
+                    <input type="checkbox" id="chk_habilitar_formales" style="width: auto;" onchange="toggleSeccionFormales()">
+                    <span>Habilitar Cotización y Cuenta de Cobro</span>
+                </label>
+            </div>
+
+            <div id="bloque_datos_formales" style="display: none; background: #0b0e14; padding: 12px; border-radius: 6px; border: 1px solid #1e293b; margin-bottom: 15px;">
+                <div class="fila-2">
+                    <div class="campo">
+                        <label>NIT / C.C. del Comprador:</label>
+                        <input type="text" id="in_nit_comprador" placeholder="Ej: 901535386" oninput="actualizar()">
+                    </div>
+                    <div class="campo">
+                        <label>N° Cuenta de Cobro:</label>
+                        <input type="text" id="in_num_cuenta_cobro" value="001-26" oninput="actualizar()">
+                    </div>
+                </div>
+                <p style="font-size:0.7rem; color:#94a3b8; margin: 4px 0 0 0;">* Los datos del vendedor (Andrea del Pilar Villalba, CC 1022956495, Bancolombia #09400001633) se incluyen automáticamente.</p>
+            </div>
+
             <h3>
                 2. Camisas
                 <button type="button" class="btn-add" onclick="agregarCamisa()">➕ Añadir Camisa</button>
@@ -134,8 +170,10 @@
         <!-- PANEL PREVISUALIZACIÓN -->
         <div class="panel-previsualizacion">
             <div class="acciones-btn">
-                <button class="btn btn-cliente" onclick="generarPDF('doc-cliente', 'Pedido')">📄 Descargar PDF Cliente</button>
-                <button class="btn btn-taller" onclick="generarPDF('doc-taller', 'Orden_Taller')">🛠️ Descargar PDF Taller</button>
+                <button class="btn btn-cliente" onclick="generarPDF('doc-cliente', 'Pedido')">📄 PDF Cliente</button>
+                <button class="btn btn-taller" onclick="generarPDF('doc-taller', 'Orden_Taller')">🛠️ PDF Taller</button>
+                <button class="btn btn-cotizacion" id="btn_pdf_cotizacion" style="display:none;" onclick="generarPDF('doc-cotizacion', 'Cotizacion')">📋 PDF Cotización</button>
+                <button class="btn btn-cuenta" id="btn_pdf_cuenta" style="display:none;" onclick="generarPDF('doc-cuenta-cobro', 'Cuenta_de_Cobro')">💰 PDF Cuent. Cobro</button>
             </div>
             
             <!-- DOCUMENTO CLIENTE -->
@@ -257,6 +295,97 @@
                     </table>
                 </div>
             </div>
+
+            <!-- DOCUMENTO COTIZACIÓN FORMAL (OPCIONAL) -->
+            <div class="hoja-documento" id="doc-cotizacion" style="display:none; color:#000;">
+                <div class="cot-titulo">COTIZACIÓN</div>
+                <p style="font-size:0.8rem; margin-bottom: 12px;"><strong>Fecha:</strong> <span id="out_cot_fecha">---</span></p>
+                <table class="cot-tabla-vendedor">
+                    <tr>
+                        <td style="width: 30%; font-weight: bold; background: #f8fafc;">Datos vendedor</td>
+                        <td style="width: 70%;">
+                            <strong>Andrea del pilar Villalba</strong><br>
+                            C.C. 1022956495<br>
+                            CL: 3184250115<br>
+                            Dir. Usme chiguaza<br>
+                            Ciudad : Bogotá Colombia<br>
+                            Banco : Bancolombia<br>
+                            Cuenta de ahorros<br>
+                            # 09400001633
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; background: #f8fafc;">Nombre comprador</td>
+                        <td>
+                            <strong id="out_cot_comprador">---</strong><br>
+                            <span id="out_cot_nit_comprador"></span>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="subtitulo-tabla" style="border-left-color: #000; background: #f1f5f9; color: #000; margin-bottom: 8px;">RESUMEN DE PRODUCTOS Y SERVICIOS</div>
+                <table class="tabla-doc" style="margin-bottom: 15px;">
+                    <thead>
+                        <tr style="background:#000;">
+                            <th style="width: 50%;">Ítem / Descripción</th>
+                            <th style="width: 15%; text-align:center;">Cantidad</th>
+                            <th style="width: 17%; text-align:right;">Valor Unitario</th>
+                            <th style="width: 18%; text-align:right;">Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="out_tabla_cotizacion_items"></tbody>
+                </table>
+
+                <table class="tabla-doc" style="width: 50%; float: right; margin-top: 5px;">
+                    <tr>
+                        <td style="font-weight:bold; background:#f8fafc;">Total Cantidad</td>
+                        <td style="text-align:right; font-weight:bold;" id="out_cot_total_cant">0</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold; background:#f8fafc;">VALOR TOTAL</td>
+                        <td style="text-align:right; font-weight:bold; font-size: 0.85rem;" id="out_cot_valor_total">$0</td>
+                    </tr>
+                </table>
+                <div style="clear:both;"></div>
+
+                <div class="cot-firma">
+                    Andrea Villalba<br>
+                    Cc1022956495
+                </div>
+            </div>
+
+            <!-- DOCUMENTO CUENTA DE COBRO (OPCIONAL) -->
+            <div class="hoja-documento" id="doc-cuenta-cobro" style="display:none; color:#000;">
+                <p style="text-align: center; font-size: 0.85rem; font-weight: bold; margin-bottom: 25px;">
+                    Bogotá <span id="out_cuenta_fecha">---</span>
+                </p>
+
+                <div class="cuenta-cobro-box">
+                    <h3 style="font-weight: 800; font-size: 1.1rem; text-transform: uppercase;">Cuenta de cobro <span id="out_cuenta_num">001-26</span></h3>
+                    
+                    <p style="margin-top: 20px;"><strong>Señores.</strong></p>
+                    <p style="font-size: 1.05rem; font-weight: bold; text-transform: uppercase; margin: 5px 0;"><span id="out_cuenta_comprador">---</span></p>
+                    <p style="font-weight: bold; margin-top: 0;" id="out_cuenta_nit_comprador_box">NIT. ---</p>
+
+                    <p style="margin-top: 25px; font-weight: bold; font-size: 0.95rem;">Debe</p>
+
+                    <p style="font-size: 1rem; font-weight: bold; margin: 10px 0;">Andrea del pilar Villalba Contreras</p>
+                    <p style="font-weight: bold; margin-top: 0;">NIT. 1022956495</p>
+
+                    <p style="margin-top: 25px; font-weight: bold;">Por concepto de:</p>
+
+                    <p style="font-size: 0.95rem; padding: 0 20px; line-height: 1.5;" id="out_cuenta_concepto">
+                        Fabricación de prendas industriales por una suma de cero pesos ($0) M/CTE.
+                    </p>
+                </div>
+
+                <div class="cot-firma" style="text-align: center; margin-top: 60px;">
+                    Andrea Villalba<br>
+                    Cel. 3184250115
+                    <div style="width: 200px; border-bottom: 1px solid #000; margin: 40px auto 0 auto;"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -264,6 +393,16 @@
         let contadorCamisas = 0;
         let contadorCapuchones = 0;
         let fotosCamisas = {};
+
+        function toggleSeccionFormales() {
+            const activo = document.getElementById('chk_habilitar_formales').checked;
+            document.getElementById('bloque_datos_formales').style.display = activo ? 'block' : 'none';
+            document.getElementById('btn_pdf_cotizacion').style.display = activo ? 'inline-block' : 'none';
+            document.getElementById('btn_pdf_cuenta').style.display = activo ? 'inline-block' : 'none';
+            document.getElementById('doc-cotizacion').style.display = activo ? 'block' : 'none';
+            document.getElementById('doc-cuenta-cobro').style.display = activo ? 'block' : 'none';
+            actualizar();
+        }
 
         function cambiarPrecioBaseCamisa(id) {
             const card = document.getElementById(`camisa_card_${id}`);
@@ -563,11 +702,66 @@
             }
         }
 
+        function numeroALetras(num) {
+            if (num === 0) return "cero";
+            const unidades = ["", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
+            const decenas = ["", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"];
+            const diezEspeciales = ["diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"];
+            const centenas = ["", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecentos"];
+
+            function convertirGrupo(n) {
+                let output = "";
+                if (n === 100) return "cien";
+                let c = Math.floor(n / 100);
+                let d = Math.floor((n % 100) / 10);
+                let u = n % 10;
+
+                if (c > 0) output += centenas[c] + " ";
+                if (d === 1 && u >= 0) {
+                    output += diezEspeciales[u] + " ";
+                } else {
+                    if (d > 0) output += decenas[d] + (u > 0 ? " y " : " ");
+                    if (u > 0 && d !== 1) output += unidades[u] + " ";
+                }
+                return output.trim();
+            }
+
+            let millones = Math.floor(num / 1000000);
+            let miles = Math.floor((num % 1000000) / 1000);
+            let resto = num % 1000;
+            let resultado = "";
+
+            if (millones > 0) {
+                resultado += (millones === 1 ? "un millón " : convertirGrupo(millones) + " millones ");
+            }
+            if (miles > 0) {
+                resultado += (miles === 1 ? "mil " : convertirGrupo(miles) + " mil ");
+            }
+            if (resto > 0) {
+                resultado += convertirGrupo(resto);
+            }
+            return resultado.trim();
+        }
+
         function actualizar() {
             const clienteVal = document.getElementById('in_cliente').value || '---';
+            const fechaVal = document.getElementById('in_fecha_abono').value || new Date().toISOString().split('T')[0];
+            const nitComprador = document.getElementById('in_nit_comprador').value;
+            const numCuenta = document.getElementById('in_num_cuenta_cobro').value || '001-26';
+
             document.getElementById('out_cliente').innerText = clienteVal;
             document.getElementById('out_taller_cliente').innerText = clienteVal;
-            document.getElementById('out_fecha_abono').innerText = document.getElementById('in_fecha_abono').value || '---';
+            document.getElementById('out_fecha_abono').innerText = fechaVal;
+
+            // Datos Cotización & Cuenta de cobro
+            document.getElementById('out_cot_fecha').innerText = fechaVal;
+            document.getElementById('out_cot_comprador').innerText = clienteVal;
+            document.getElementById('out_cot_nit_comprador').innerText = nitComprador ? `NIT. ${nitComprador}` : '';
+            
+            document.getElementById('out_cuenta_fecha').innerText = fechaVal;
+            document.getElementById('out_cuenta_num').innerText = numCuenta;
+            document.getElementById('out_cuenta_comprador').innerText = clienteVal;
+            document.getElementById('out_cuenta_nit_comprador_box').innerText = nitComprador ? `NIT. ${nitComprador}` : '';
             
             const estaPendiente = document.getElementById('chk_confirmado').checked;
             const elEstadoTaller = document.getElementById('out_estado_fabricacion');
@@ -589,6 +783,7 @@
             document.getElementById('out_abono').innerText = abono.toLocaleString('es-CO');
             
             let sumaTotal = 0;
+            let cantidadTotalUnidades = 0;
             
             // Camisas
             const tarjetasCamisas = document.querySelectorAll('.tarjeta-prenda-input');
@@ -598,6 +793,9 @@
             tbodyCamisasCliente.innerHTML = '';
             tbodyCamisasTaller.innerHTML = '';
             
+            const tbodyCotizacion = document.getElementById('out_tabla_cotizacion_items');
+            tbodyCotizacion.innerHTML = '';
+
             tarjetasCamisas.forEach((item, index) => {
                 const idCamisaStr = item.id.replace('camisa_card_', '');
                 const selectLinea = item.querySelector('.cam_linea');
@@ -607,6 +805,7 @@
                 const precioExtra = parseFloat(item.querySelector('.cam_precio_extra').value) || 0;
                 const precioCamisaTotal = precioBase + precioExtra;
                 sumaTotal += precioCamisaTotal;
+                cantidadTotalUnidades += 1;
                 
                 const talla = item.querySelector('.cam_talla').value;
                 const tallaFormateada = (talla === 'SIN CONFIRMAR') ? '<span class="talla-alerta">⚠️ SIN CONFIRMAR</span>' : `<strong>${talla}</strong>`;
@@ -665,6 +864,15 @@
                         <td>${textoExtra}</td>
                     </tr>
                 `;
+
+                tbodyCotizacion.innerHTML += `
+                    <tr>
+                        <td>Camisa industrial línea ${lineaNombre} (${modelo}) - Talla ${talla}</td>
+                        <td style="text-align:center;">1</td>
+                        <td style="text-align:right;">$${precioCamisaTotal.toLocaleString('es-CO')}</td>
+                        <td style="text-align:right;">$${precioCamisaTotal.toLocaleString('es-CO')}</td>
+                    </tr>
+                `;
             });
             
             // Capuchones
@@ -684,6 +892,7 @@
                 
                 const subtotalCapuchon = cantidad * precioBase;
                 sumaTotal += subtotalCapuchon;
+                cantidadTotalUnidades += (modo === 'docena' ? cantidad * 12 : cantidad);
                 
                 const talla = item.querySelector('.cap_talla').value;
                 const tallaFormateada = (talla === 'SIN CONFIRMAR') ? '<span class="talla-alerta">⚠️ SIN CONFIRMAR</span>' : `<strong>${talla}</strong>`;
@@ -711,11 +920,28 @@
                         <td>${colores}</td>
                     </tr>
                 `;
+
+                tbodyCotizacion.innerHTML += `
+                    <tr>
+                        <td>Capuchón en material ${materialNombre} (${colores})</td>
+                        <td style="text-align:center;">${textoCantidadModalidad}</td>
+                        <td style="text-align:right;">$${precioBase.toLocaleString('es-CO')}</td>
+                        <td style="text-align:right;">$${subtotalCapuchon.toLocaleString('es-CO')}</td>
+                    </tr>
+                `;
             });
 
             const saldo = sumaTotal - abono;
             document.getElementById('out_total').innerText = sumaTotal.toLocaleString('es-CO');
             document.getElementById('out_saldo').innerText = saldo.toLocaleString('es-CO');
+
+            // Totales Cotización & Cuenta de Cobro
+            document.getElementById('out_cot_total_cant').innerText = cantidadTotalUnidades;
+            document.getElementById('out_cot_valor_total').innerText = `$${sumaTotal.toLocaleString('es-CO')}`;
+
+            const valorEnLetras = numeroALetras(sumaTotal);
+            document.getElementById('out_cuenta_concepto').innerText = 
+                `Fabricación e indumentaria industrial por una suma de ${valorEnLetras} pesos ($${sumaTotal.toLocaleString('es-CO')}) M/CTE.`;
         }
 
         function generarPDF(elementId, tipoDoc) {
@@ -751,11 +977,14 @@
                 document.getElementById('in_fecha_abono').value = '';
                 document.getElementById('in_abono').value = '0';
                 document.getElementById('chk_confirmado').checked = false;
+                document.getElementById('chk_habilitar_formales').checked = false;
+                document.getElementById('in_nit_comprador').value = '';
                 document.getElementById('contenedor_camisas_inputs').innerHTML = '';
                 document.getElementById('contenedor_capuchones_inputs').innerHTML = '';
                 contadorCamisas = 0;
                 contadorCapuchones = 0;
                 fotosCamisas = {};
+                toggleSeccionFormales();
                 agregarCamisa();
             }
         }
