@@ -16,7 +16,6 @@
         .contenedor-app { display: flex; gap: 20px; flex-wrap: wrap; }
         .panel-formulario { flex: 1; min-width: 320px; background: #121721; padding: 18px; border-radius: 8px; border: 1px solid #1e293b; }
         .panel-previsualizacion { flex: 1.2; min-width: 340px; }
-
         h3 { border-bottom: 2px solid #00e5ff; padding-bottom: 4px; color: #00e5ff; font-size: 0.95rem; text-transform: uppercase; margin-top: 18px; display: flex; justify-content: space-between; align-items: center; }
         .campo { margin-bottom: 10px; }
         label { display: block; font-size: 0.8rem; margin-bottom: 3px; color: #94a3b8; font-weight: 600; }
@@ -27,10 +26,8 @@
         .fila-2 > div { flex: 1; }
         .fila-3 { display: flex; gap: 8px; }
         .fila-3 > div { flex: 1; }
-
         .tarjeta-prenda-input { background: #0b0e14; border-left: 4px solid #00e5ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
         .tarjeta-capuchon-input { background: #0b0e14; border-left: 4px solid #00b4d8; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
-
         .cabecera-tarjeta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .acciones-item { display: flex; gap: 5px; }
         .btn-mini { padding: 4px 8px; border-radius: 4px; border: none; font-size: 0.7rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
@@ -38,7 +35,6 @@
         .btn-del { background: #ef4444; color: #fff; }
         .btn-add { background: #10b981; color: #fff; padding: 5px 10px; font-size: 0.75rem; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
         .btn-mini:hover, .btn-add:hover { opacity: 0.85; }
-
         .acciones-btn { display: flex; gap: 10px; margin-bottom: 15px; }
         .btn { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; color: #0b0e14; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; transition: 0.2s; }
         .btn-cliente { background: #00b4d8; }
@@ -46,7 +42,6 @@
         .btn-reset { background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.75rem; }
         .btn:hover, .btn-reset:hover { opacity: 0.9; }
 
-        /* Estilos Documento PDF optimizados */
         .hoja-documento { 
             background: #ffffff; 
             color: #111111; 
@@ -59,7 +54,6 @@
             box-sizing: border-box;
             overflow: hidden;
         }
-
         .encabezado-doc { display: table; width: 100%; border-bottom: 2px solid #0b0e14; padding-bottom: 8px; margin-bottom: 10px; }
         .brand-doc { display: table-cell; vertical-align: middle; }
         .svg-logo { width: 38px; height: 38px; vertical-align: middle; display: inline-block; }
@@ -67,11 +61,9 @@
         .encabezado-doc h2 { margin: 0; font-size: 1.1rem; color: #0b0e14; font-weight: 900; line-height: 1; }
         .tag-doc-cell { display: table-cell; vertical-align: middle; text-align: right; }
         .tag-doc { background: #0b0e14; color: #00e5ff; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; display: inline-block; }
-
         .tabla-doc { width: 100%; border-collapse: collapse; margin-top: 6px; margin-bottom: 8px; table-layout: fixed; }
         .tabla-doc th, .tabla-doc td { border: 1px solid #cbd5e1; padding: 6px; font-size: 0.7rem; text-align: left; word-wrap: break-word; vertical-align: middle; }
         .tabla-doc th { background: #0b0e14; color: #ffffff; font-weight: bold; }
-
         .galeria-fotos { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
         .foto-tabla { width: 45px; height: 45px; object-fit: cover; border: 1px solid #94a3b8; border-radius: 4px; display: block; }
         .subtitulo-tabla { background: #f1f5f9; font-weight: bold; font-size: 0.75rem; color: #0f172a; padding: 4px 6px; margin-top: 10px; border-left: 3px solid #00b4d8; }
@@ -82,7 +74,6 @@
         
         .talla-alerta { color: #dc2626; font-weight: bold; background: #fee2e2; padding: 1px 3px; border-radius: 3px; }
         
-        /* Previsualización de Fotos en Formulario con botón Eliminar (X) */
         .contenedor-preview-input { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
         .item-foto-preview { position: relative; display: inline-block; }
         .img-preview-input { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #00e5ff; display: block; }
@@ -107,10 +98,8 @@
     </style>
 </head>
 <body>
-
     <h1 class="header-title">REYAND INDUPRO</h1>
     <div class="sub-header">Plataforma de Control de Pedidos y Generación de Órdenes</div>
-
     <div class="contenedor-app">
         
         <!-- PANEL FORMULARIO -->
@@ -124,35 +113,31 @@
                 <div class="campo"><label>Fecha Abono:</label><input type="date" id="in_fecha_abono" oninput="actualizar()"></div>
                 <div class="campo"><label>Abono ($):</label><input type="number" id="in_abono" value="0" oninput="actualizar()"></div>
             </div>
-
             <div class="campo" style="background: #0b0e14; padding: 10px; border-radius: 4px; border: 1px solid #1e293b; margin-top: 10px;">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fff;">
                     <input type="checkbox" id="chk_confirmado" style="width: auto;" onchange="actualizar()">
                     <span>Pedido tomado (Pendiente de abono / Autorización para fabricar)</span>
                 </label>
             </div>
-
             <h3>
                 2. Camisas
                 <button type="button" class="btn-add" onclick="agregarCamisa()">➕ Añadir Camisa</button>
             </h3>
             <div id="contenedor_camisas_inputs"></div>
-
             <h3>
-                3. Capuchones
-                <button type="button" class="btn-add" onclick="agregarCapuchon()">➕ Añadir Capuchón</button>
+                3. Capuchones (Mayorista / Detal)
+                <button type="button" class="btn-add" onclick="agregarCapuchon()">➕ Añadir Lote de Capuchones</button>
             </h3>
             <div id="contenedor_capuchones_inputs"></div>
         </div>
-
+        
         <!-- PANEL PREVISUALIZACIÓN -->
         <div class="panel-previsualizacion">
-            
             <div class="acciones-btn">
                 <button class="btn btn-cliente" onclick="generarPDF('doc-cliente', 'Pedido')">📄 Descargar PDF Cliente</button>
                 <button class="btn btn-taller" onclick="generarPDF('doc-taller', 'Orden_Taller')">🛠️ Descargar PDF Taller</button>
             </div>
-
+            
             <!-- DOCUMENTO CLIENTE -->
             <div class="hoja-documento" id="doc-cliente">
                 <div class="encabezado-doc">
@@ -170,13 +155,10 @@
                         <div class="tag-doc">PEDIDO CLIENTE</div>
                     </div>
                 </div>
-
                 <p style="font-size:0.75rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_cliente">---</span> | <strong>Fecha Abono:</strong> <span id="out_fecha_abono">---</span></p>
-
                 <div id="out_estado_cliente" class="caja-alerta alerta-pendiente">
                     ⚠️ PENDIENTE DE ABONO: La fabricación iniciará una vez se confirme el abono inicial.
                 </div>
-
                 <div id="seccion_out_camisas_cliente">
                     <div class="subtitulo-tabla">DETALLE DE CAMISAS</div>
                     <table class="tabla-doc">
@@ -194,23 +176,22 @@
                         <tbody id="out_tabla_camisas_cliente"></tbody>
                     </table>
                 </div>
-
                 <div id="seccion_out_capuchones_cliente">
                     <div class="subtitulo-tabla">DETALLE DE CAPUCHONES</div>
                     <table class="tabla-doc">
                         <thead>
                             <tr>
-                                <th style="width: 8%;">#</th>
-                                <th style="width: 32%;">Material / Tipo</th>
-                                <th style="width: 20%;">Talla</th>
-                                <th style="width: 25%;">Colores / Obs.</th>
-                                <th style="width: 15%;">Precio</th>
+                                <th style="width: 6%;">#</th>
+                                <th style="width: 30%;">Material / Descripción</th>
+                                <th style="width: 14%;">Cantidad</th>
+                                <th style="width: 12%;">Talla</th>
+                                <th style="width: 23%;">Colores / Obs.</th>
+                                <th style="width: 15%;">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_capuchones_cliente"></tbody>
                     </table>
                 </div>
-
                 <div style="background: #f8fafc; padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid #e2e8f0; font-size: 0.75rem;">
                     <table style="width: 100%; border: none;">
                         <tr>
@@ -239,13 +220,10 @@
                         <div class="tag-doc" style="background: #00b4d8; color: #0b0e14;">ORDEN TALLER</div>
                     </div>
                 </div>
-
-                <p style="font-size:0.75rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_taller_cliente">---</span> | <strong>Camisas:</strong> <span id="out_taller_cant_camisas">0</span> | <strong>Capuchones:</strong> <span id="out_taller_cant_capuchones">0</span></p>
-
+                <p style="font-size:0.75rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_taller_cliente">---</span> | <strong>Camisas:</strong> <span id="out_taller_cant_camisas">0</span> | <strong>Lotes de Capuchones:</strong> <span id="out_taller_cant_capuchones">0</span></p>
                 <div id="out_estado_fabricacion" class="caja-alerta alerta-pendiente">
                     ⏳ PEDIDO REGISTRADO - PENDIENTE DE CONFIRMACIÓN DE ABONO PARA INICIAR FABRICACIÓN
                 </div>
-
                 <div id="seccion_out_camisas_taller">
                     <div class="subtitulo-tabla">PRODUCCIÓN DE CAMISAS</div>
                     <table class="tabla-doc">
@@ -263,25 +241,23 @@
                         <tbody id="out_tabla_camisas_taller"></tbody>
                     </table>
                 </div>
-
                 <div id="seccion_out_capuchones_taller">
                     <div class="subtitulo-tabla">PRODUCCIÓN DE CAPUCHONES</div>
                     <table class="tabla-doc">
                         <thead>
                             <tr>
                                 <th style="width: 8%;">#</th>
-                                <th style="width: 32%;">Material</th>
-                                <th style="width: 20%;">Talla</th>
-                                <th style="width: 40%;">Colores / Especificaciones</th>
+                                <th style="width: 30%;">Material</th>
+                                <th style="width: 18%;">Volumen Cantidad</th>
+                                <th style="width: 14%;">Talla</th>
+                                <th style="width: 30%;">Colores / Especificaciones</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_capuchones_taller"></tbody>
                     </table>
                 </div>
             </div>
-
         </div>
-
     </div>
 
     <script>
@@ -297,11 +273,24 @@
             actualizar();
         }
 
-        function cambiarPrecioBaseCapuchon(id) {
+        function cambiarModoCapuchon(id) {
             const card = document.getElementById(`capuchon_card_${id}`);
+            const modo = card.querySelector('.cap_modo').value;
             const selectMaterial = card.querySelector('.cap_material');
-            const precioSugerido = selectMaterial.options[selectMaterial.selectedIndex].getAttribute('data-precio');
-            card.querySelector('.cap_precio_base').value = precioSugerido;
+            const labelPrecio = card.querySelector('.cap_label_precio');
+            const labelCantidad = card.querySelector('.cap_label_cantidad');
+            
+            if (modo === 'docena') {
+                const precioDocenaSugerido = selectMaterial.options[selectMaterial.selectedIndex].getAttribute('data-precio-docena');
+                card.querySelector('.cap_precio_base').value = precioDocenaSugerido;
+                labelPrecio.innerText = "Precio x Docena ($):";
+                labelCantidad.innerText = "Cant. Docenas:";
+            } else {
+                const precioUnidadSugerido = selectMaterial.options[selectMaterial.selectedIndex].getAttribute('data-precio-unidad');
+                card.querySelector('.cap_precio_base').value = precioUnidadSugerido;
+                labelPrecio.innerText = "Precio x Unidad ($):";
+                labelCantidad.innerText = "Cant. Unidades:";
+            }
             actualizar();
         }
 
@@ -361,13 +350,11 @@
                         <input type="text" class="cam_colores" placeholder="Ej: Negro/Azul, Hilo Azul" oninput="actualizar()">
                     </div>
                 </div>
-
                 <div class="campo" style="margin-top: 5px;">
                     <label>Fotos de Referencia / Diseños:</label>
                     <input type="file" accept="image/*" multiple onchange="cargarFotoCamisa(event, '${id}')">
                     <div id="preview_input_${id}" class="contenedor-preview-input"></div>
                 </div>
-
                 <div style="background: #18202f; padding: 10px; border-radius: 5px; margin-top: 8px; border: 1px solid #1e293b;">
                     <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 8px;">
                         <label style="color:#00e5ff; margin:0;">Bordados Principales:</label>
@@ -375,7 +362,6 @@
                             <input type="checkbox" class="cam_sin_bordado" style="width:auto;" onchange="toggleBordados('${id}')"> Sin bordados
                         </label>
                     </div>
-
                     <div id="bloque_bordados_${id}">
                         <div class="fila-3">
                             <div class="campo"><label>Nombre:</label><input type="text" class="cam_nombre" placeholder="Ej: JUAN" oninput="actualizar()"></div>
@@ -383,7 +369,6 @@
                             <div class="campo"><label>Bandera:</label><input type="text" class="cam_bandera" placeholder="Ej: Colombia" oninput="actualizar()"></div>
                         </div>
                     </div>
-
                     <label style="color:#00e5ff; margin-top:8px;">Bordado Adicional / Diseño Especial:</label>
                     <div class="fila-2">
                         <div class="campo" style="flex:2;">
@@ -396,7 +381,6 @@
                 </div>
             `;
             contenedor.appendChild(div);
-
             if (datos) {
                 div.querySelector('.cam_linea').value = datos.linea;
                 div.querySelector('.cam_precio_base').value = datos.precioBase;
@@ -415,7 +399,6 @@
                 }
                 toggleBordados(id);
             }
-
             actualizar();
         }
 
@@ -490,29 +473,41 @@
             contadorCapuchones++;
             const id = contadorCapuchones;
             const contenedor = document.getElementById('contenedor_capuchones_inputs');
-
             const div = document.createElement('div');
             div.className = 'tarjeta-capuchon-input';
             div.id = `capuchon_card_${id}`;
             div.innerHTML = `
                 <div class="cabecera-tarjeta">
-                    <strong style="color:#00b4d8; font-size:0.85rem;">Capuchón #${id}</strong>
+                    <strong style="color:#00b4d8; font-size:0.85rem;">Lote / Capuchón #${id}</strong>
                     <div class="acciones-item">
                         <button type="button" class="btn-mini btn-dup" onclick="duplicarCapuchon('${id}')">📋 Duplicar</button>
                         <button type="button" class="btn-mini btn-del" onclick="eliminarPrenda('capuchon_card_${id}')">🗑️ Eliminar</button>
                     </div>
                 </div>
-                <div class="fila-3">
+                <div class="fila-2" style="margin-bottom:8px;">
                     <div class="campo">
-                        <label>Material:</label>
-                        <select class="cap_material" onchange="cambiarPrecioBaseCapuchon('${id}')">
-                            <option value="Drill" data-precio="16000">Drill</option>
-                            <option value="Dacrón" data-precio="12000">Dacrón</option>
+                        <label>Modo de Venta:</label>
+                        <select class="cap_modo" onchange="cambiarModoCapuchon('${id}')">
+                            <option value="docena">Al Por Mayor (Docenas)</option>
+                            <option value="unidad">Por Unidad</option>
                         </select>
                     </div>
                     <div class="campo">
-                        <label>Precio Unitario ($):</label>
-                        <input type="number" class="cap_precio_base" value="16000" oninput="actualizar()">
+                        <label>Material:</label>
+                        <select class="cap_material" onchange="cambiarModoCapuchon('${id}')">
+                            <option value="Drill" data-precio-unidad="16000" data-precio-docena="180000">Drill</option>
+                            <option value="Dacrón" data-precio-unidad="12000" data-precio-docena="135000">Dacrón</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fila-3">
+                    <div class="campo">
+                        <label class="cap_label_cantidad">Cant. Docenas:</label>
+                        <input type="number" class="cap_cantidad" value="1" min="1" oninput="actualizar()">
+                    </div>
+                    <div class="campo">
+                        <label class="cap_label_precio">Precio x Docena ($):</label>
+                        <input type="number" class="cap_precio_base" value="180000" oninput="actualizar()">
                     </div>
                     <div class="campo">
                         <label>Talla:</label>
@@ -528,25 +523,28 @@
                 </div>
                 <div class="campo">
                     <label>Colores / Referencia Visual:</label>
-                    <input type="text" class="cap_colores" placeholder="Ej: Negro con combinación Roja" oninput="actualizar()">
+                    <input type="text" class="cap_colores" placeholder="Ej: Surtido o Negro con combinación Roja" oninput="actualizar()">
                 </div>
             `;
             contenedor.appendChild(div);
-
             if (datos) {
+                div.querySelector('.cap_modo').value = datos.modo;
                 div.querySelector('.cap_material').value = datos.material;
+                div.querySelector('.cap_cantidad').value = datos.cantidad;
                 div.querySelector('.cap_precio_base').value = datos.precioBase;
                 div.querySelector('.cap_talla').value = datos.talla;
                 div.querySelector('.cap_colores').value = datos.colores;
+                cambiarModoCapuchon(id);
             }
-
             actualizar();
         }
 
         function duplicarCapuchon(idOriginal) {
             const cardOriginal = document.getElementById(`capuchon_card_${idOriginal}`);
             const datos = {
+                modo: cardOriginal.querySelector('.cap_modo').value,
                 material: cardOriginal.querySelector('.cap_material').value,
+                cantidad: cardOriginal.querySelector('.cap_cantidad').value,
                 precioBase: cardOriginal.querySelector('.cap_precio_base').value,
                 talla: cardOriginal.querySelector('.cap_talla').value,
                 colores: cardOriginal.querySelector('.cap_colores').value
@@ -570,37 +568,36 @@
             document.getElementById('out_cliente').innerText = clienteVal;
             document.getElementById('out_taller_cliente').innerText = clienteVal;
             document.getElementById('out_fecha_abono').innerText = document.getElementById('in_fecha_abono').value || '---';
-
+            
             const estaPendiente = document.getElementById('chk_confirmado').checked;
             const elEstadoTaller = document.getElementById('out_estado_fabricacion');
             const elEstadoCliente = document.getElementById('out_estado_cliente');
-
+            
             if (estaPendiente) {
                 elEstadoTaller.className = 'caja-alerta alerta-pendiente';
                 elEstadoTaller.innerHTML = '⏳ PEDIDO REGISTRADO - PENDIENTE DE CONFIRMACIÓN DE ABONO PARA INICIAR FABRICACIÓN';
-
                 elEstadoCliente.className = 'caja-alerta alerta-pendiente';
                 elEstadoCliente.innerHTML = '⚠️ PENDIENTE DE ABONO: La fabricación iniciará una vez se confirme el abono inicial.';
             } else {
                 elEstadoTaller.className = 'caja-alerta alerta-listo';
                 elEstadoTaller.innerHTML = '✅ PEDIDO CONFIRMADO Y ABONADO - EN ORDEN DE PRODUCCIÓN';
-
                 elEstadoCliente.className = 'caja-alerta alerta-listo';
                 elEstadoCliente.innerHTML = '✅ PEDIDO CONFIRMADO Y ABONADO - EN PRODUCCIÓN';
             }
-
+            
             const abono = parseFloat(document.getElementById('in_abono').value) || 0;
             document.getElementById('out_abono').innerText = abono.toLocaleString('es-CO');
-
+            
             let sumaTotal = 0;
-
+            
+            // Camisas
             const tarjetasCamisas = document.querySelectorAll('.tarjeta-prenda-input');
             document.getElementById('out_taller_cant_camisas').innerText = tarjetasCamisas.length;
             const tbodyCamisasCliente = document.getElementById('out_tabla_camisas_cliente');
             const tbodyCamisasTaller = document.getElementById('out_tabla_camisas_taller');
             tbodyCamisasCliente.innerHTML = '';
             tbodyCamisasTaller.innerHTML = '';
-
+            
             tarjetasCamisas.forEach((item, index) => {
                 const idCamisaStr = item.id.replace('camisa_card_', '');
                 const selectLinea = item.querySelector('.cam_linea');
@@ -610,16 +607,14 @@
                 const precioExtra = parseFloat(item.querySelector('.cam_precio_extra').value) || 0;
                 const precioCamisaTotal = precioBase + precioExtra;
                 sumaTotal += precioCamisaTotal;
-
+                
                 const talla = item.querySelector('.cam_talla').value;
                 const tallaFormateada = (talla === 'SIN CONFIRMAR') ? '<span class="talla-alerta">⚠️ SIN CONFIRMAR</span>' : `<strong>${talla}</strong>`;
-
                 const modelo = item.querySelector('.cam_modelo').value;
                 const colores = item.querySelector('.cam_colores').value || '---';
-
                 const sinBordado = item.querySelector('.cam_sin_bordado').checked;
+                
                 let textoBordadosPrincipales = 'Sin bordado';
-
                 if (!sinBordado) {
                     const nom = item.querySelector('.cam_nombre').value;
                     const rh = item.querySelector('.cam_rh').value;
@@ -632,13 +627,13 @@
                     
                     textoBordadosPrincipales = partes.length > 0 ? partes.join('<br>') : 'Sin especificación';
                 }
-
+                
                 const bordadoExtraTxt = item.querySelector('.cam_bordado_extra').value;
                 let textoExtra = 'N/A';
                 if (bordadoExtraTxt) {
                     textoExtra = `${bordadoExtraTxt} (+ $${precioExtra.toLocaleString('es-CO')})`;
                 }
-
+                
                 tbodyCamisasCliente.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
@@ -650,7 +645,7 @@
                         <td>$${precioCamisaTotal.toLocaleString('es-CO')}</td>
                     </tr>
                 `;
-
+                
                 const listaFotos = fotosCamisas[idCamisaStr] || [];
                 let celdaFoto = `<span style="color:#94a3b8; font-size: 0.65rem;">Sin fotos</span>`;
                 
@@ -658,7 +653,7 @@
                     const htmlFotos = listaFotos.map(src => `<img src="${src}" class="foto-tabla">`).join('');
                     celdaFoto = `<div class="galeria-fotos">${htmlFotos}</div>`;
                 }
-
+                
                 tbodyCamisasTaller.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
@@ -671,38 +666,47 @@
                     </tr>
                 `;
             });
-
+            
+            // Capuchones
             const tarjetasCapuchones = document.querySelectorAll('.tarjeta-capuchon-input');
             document.getElementById('out_taller_cant_capuchones').innerText = tarjetasCapuchones.length;
             const tbodyCapuchonesCliente = document.getElementById('out_tabla_capuchones_cliente');
             const tbodyCapuchonesTaller = document.getElementById('out_tabla_capuchones_taller');
             tbodyCapuchonesCliente.innerHTML = '';
             tbodyCapuchonesTaller.innerHTML = '';
-
+            
             tarjetasCapuchones.forEach((item, index) => {
+                const modo = item.querySelector('.cap_modo').value;
                 const selectMaterial = item.querySelector('.cap_material');
                 const materialNombre = selectMaterial.value;
-                const precio = parseFloat(item.querySelector('.cap_precio_base').value) || 0;
-                sumaTotal += precio;
-
+                const cantidad = parseFloat(item.querySelector('.cap_cantidad').value) || 1;
+                const precioBase = parseFloat(item.querySelector('.cap_precio_base').value) || 0;
+                
+                const subtotalCapuchon = cantidad * precioBase;
+                sumaTotal += subtotalCapuchon;
+                
                 const talla = item.querySelector('.cap_talla').value;
                 const tallaFormateada = (talla === 'SIN CONFIRMAR') ? '<span class="talla-alerta">⚠️ SIN CONFIRMAR</span>' : `<strong>${talla}</strong>`;
                 const colores = item.querySelector('.cap_colores').value || '---';
-
+                
+                const textoCantidadModalidad = (modo === 'docena') ? `${cantidad} Docena(s)` : `${cantidad} Unidad(es)`;
+                
                 tbodyCapuchonesCliente.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>Capuchón en ${materialNombre}</td>
+                        <td>${textoCantidadModalidad}</td>
                         <td>${tallaFormateada}</td>
                         <td>${colores}</td>
-                        <td>$${precio.toLocaleString('es-CO')}</td>
+                        <td>$${subtotalCapuchon.toLocaleString('es-CO')}</td>
                     </tr>
                 `;
-
+                
                 tbodyCapuchonesTaller.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>Capuchón en ${materialNombre}</td>
+                        <td><strong>${textoCantidadModalidad}</strong></td>
                         <td>${tallaFormateada}</td>
                         <td>${colores}</td>
                     </tr>
@@ -724,7 +728,6 @@
             
             const clienteLimpio = cliente.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]/g, '_');
             const nombreArchivo = `${tipoDoc}_${clienteLimpio}.pdf`;
-
             const opciones = {
                 margin:       [8, 8, 8, 8],
                 filename:     nombreArchivo,
@@ -739,7 +742,6 @@
                 },
                 jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
             };
-
             html2pdf().set(opciones).from(elemento).save();
         }
 
