@@ -26,6 +26,9 @@
         .fila-2 > div { flex: 1; }
         .fila-3 { display: flex; gap: 8px; }
         .fila-3 > div { flex: 1; }
+        .fila-4 { display: flex; gap: 8px; }
+        .fila-4 > div { flex: 1; }
+
         .tarjeta-prenda-input { background: #0b0e14; border-left: 4px solid #00e5ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
         .tarjeta-capuchon-input { background: #0b0e14; border-left: 4px solid #00b4d8; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-top: 1px solid #1e293b; border-right: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
         .cabecera-tarjeta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -98,7 +101,9 @@
         }
         .btn-del-foto:hover { background: #dc2626; transform: scale(1.1); }
 
-        /* ESTILOS ESPECÍFICOS COTIZACIÓN Y CUENTA DE COBRO */
+        .badge-lote { background: #00e5ff; color: #0b0e14; padding: 2px 5px; border-radius: 3px; font-weight: bold; display: inline-block; font-size: 0.65rem; }
+
+        /* ESTILOS COTIZACIÓN Y CUENTA DE COBRO */
         .cot-titulo { text-align: center; font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .cot-tabla-vendedor { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         .cot-tabla-vendedor td { border: 1px solid #000; padding: 6px 10px; font-size: 0.75rem; vertical-align: top; }
@@ -156,13 +161,14 @@
             </div>
 
             <h3>
-                2. Camisas
-                <button type="button" class="btn-add" onclick="agregarCamisa()">➕ Añadir Camisa</button>
+                2. Camisas (Unidades / Lotes)
+                <button type="button" class="btn-add" onclick="agregarCamisa()">➕ Añadir Camisas</button>
             </h3>
             <div id="contenedor_camisas_inputs"></div>
+
             <h3>
                 3. Capuchones (Mayorista / Detal)
-                <button type="button" class="btn-add" onclick="agregarCapuchon()">➕ Añadir Lote de Capuchones</button>
+                <button type="button" class="btn-add" onclick="agregarCapuchon()">➕ Añadir Capuchones</button>
             </h3>
             <div id="contenedor_capuchones_inputs"></div>
         </div>
@@ -202,13 +208,13 @@
                     <table class="tabla-doc">
                         <thead>
                             <tr>
-                                <th style="width: 6%;">#</th>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 10%;">Cant.</th>
                                 <th style="width: 14%;">Línea</th>
-                                <th style="width: 12%;">Talla</th>
-                                <th style="width: 20%;">Colores</th>
+                                <th style="width: 10%;">Talla</th>
+                                <th style="width: 18%;">Colores</th>
                                 <th style="width: 23%;">Bordados Principales</th>
-                                <th style="width: 15%;">Bordados Extras</th>
-                                <th style="width: 10%;">Precio</th>
+                                <th style="width: 20%;">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody id="out_tabla_camisas_cliente"></tbody>
@@ -219,11 +225,11 @@
                     <table class="tabla-doc">
                         <thead>
                             <tr>
-                                <th style="width: 6%;">#</th>
+                                <th style="width: 5%;">#</th>
                                 <th style="width: 30%;">Material / Descripción</th>
-                                <th style="width: 14%;">Cantidad</th>
-                                <th style="width: 12%;">Talla</th>
-                                <th style="width: 23%;">Colores / Obs.</th>
+                                <th style="width: 15%;">Cantidad</th>
+                                <th style="width: 10%;">Talla</th>
+                                <th style="width: 25%;">Colores / Obs.</th>
                                 <th style="width: 15%;">Subtotal</th>
                             </tr>
                         </thead>
@@ -258,7 +264,7 @@
                         <div class="tag-doc" style="background: #00b4d8; color: #0b0e14;">ORDEN TALLER</div>
                     </div>
                 </div>
-                <p style="font-size:0.75rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_taller_cliente">---</span> | <strong>Camisas:</strong> <span id="out_taller_cant_camisas">0</span> | <strong>Lotes de Capuchones:</strong> <span id="out_taller_cant_capuchones">0</span></p>
+                <p style="font-size:0.75rem; margin: 4px 0;"><strong>Cliente:</strong> <span id="out_taller_cliente">---</span> | <strong>Total Camisas:</strong> <span id="out_taller_cant_camisas">0</span> u. | <strong>Capuchones:</strong> <span id="out_taller_cant_capuchones">0</span></p>
                 <div id="out_estado_fabricacion" class="caja-alerta alerta-pendiente">
                     ⏳ PEDIDO REGISTRADO - PENDIENTE DE CONFIRMACIÓN DE ABONO PARA INICIAR FABRICACIÓN
                 </div>
@@ -268,10 +274,10 @@
                         <thead>
                             <tr>
                                 <th style="width: 5%;">#</th>
-                                <th style="width: 20%;">Muestras / Diseños</th>
-                                <th style="width: 16%;">Línea / Modelo</th>
-                                <th style="width: 9%;">Talla</th>
-                                <th style="width: 17%;">Colores / Hilos</th>
+                                <th style="width: 18%;">Muestras / Diseños</th>
+                                <th style="width: 18%;">Línea / Cantidad</th>
+                                <th style="width: 8%;">Talla</th>
+                                <th style="width: 18%;">Colores / Hilos</th>
                                 <th style="width: 18%;">Bordados Principales</th>
                                 <th style="width: 15%;">Bordados Extra</th>
                             </tr>
@@ -338,7 +344,7 @@
 
                 <table class="tabla-doc" style="width: 50%; float: right; margin-top: 5px;">
                     <tr>
-                        <td style="font-weight:bold; background:#f8fafc;">Total Cantidad</td>
+                        <td style="font-weight:bold; background:#f8fafc;">Total Unidades</td>
                         <td style="text-align:right; font-weight:bold;" id="out_cot_total_cant">0</td>
                     </tr>
                     <tr>
@@ -445,13 +451,17 @@
             div.id = `camisa_card_${id}`;
             div.innerHTML = `
                 <div class="cabecera-tarjeta">
-                    <strong style="color:#00e5ff; font-size:0.85rem;">Camisa #${id}</strong>
+                    <strong style="color:#00e5ff; font-size:0.85rem;">Registro Camisas #${id}</strong>
                     <div class="acciones-item">
                         <button type="button" class="btn-mini btn-dup" onclick="duplicarCamisa('${id}')">📋 Duplicar</button>
                         <button type="button" class="btn-mini btn-del" onclick="eliminarPrenda('camisa_card_${id}', '${id}')">🗑️ Eliminar</button>
                     </div>
                 </div>
-                <div class="fila-3">
+                <div class="fila-4">
+                    <div class="campo">
+                        <label>Cantidad (Unidades):</label>
+                        <input type="number" class="cam_cantidad" value="1" min="1" oninput="actualizar()">
+                    </div>
                     <div class="campo">
                         <label>Línea:</label>
                         <select class="cam_linea" onchange="cambiarPrecioBaseCamisa('${id}')">
@@ -521,6 +531,7 @@
             `;
             contenedor.appendChild(div);
             if (datos) {
+                div.querySelector('.cam_cantidad').value = datos.cantidad || 1;
                 div.querySelector('.cam_linea').value = datos.linea;
                 div.querySelector('.cam_precio_base').value = datos.precioBase;
                 div.querySelector('.cam_talla').value = datos.talla;
@@ -592,6 +603,7 @@
         function duplicarCamisa(idOriginal) {
             const cardOriginal = document.getElementById(`camisa_card_${idOriginal}`);
             const datos = {
+                cantidad: cardOriginal.querySelector('.cam_cantidad').value,
                 linea: cardOriginal.querySelector('.cam_linea').value,
                 precioBase: cardOriginal.querySelector('.cam_precio_base').value,
                 talla: cardOriginal.querySelector('.cam_talla').value,
@@ -706,7 +718,7 @@
             if (num === 0) return "cero";
             const unidades = ["", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
             const decenas = ["", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"];
-            const diezEspeciales = ["diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"];
+            const diezEspeciales = ["diez", "once", "doce", "trece", "catorce", "quince", "diecisiete", "dieciocho", "diecinueve"];
             const centenas = ["", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecentos"];
 
             function convertirGrupo(n) {
@@ -784,10 +796,10 @@
             
             let sumaTotal = 0;
             let cantidadTotalUnidades = 0;
+            let totalCamisasUnidades = 0;
             
             // Camisas
             const tarjetasCamisas = document.querySelectorAll('.tarjeta-prenda-input');
-            document.getElementById('out_taller_cant_camisas').innerText = tarjetasCamisas.length;
             const tbodyCamisasCliente = document.getElementById('out_tabla_camisas_cliente');
             const tbodyCamisasTaller = document.getElementById('out_tabla_camisas_taller');
             tbodyCamisasCliente.innerHTML = '';
@@ -798,14 +810,18 @@
 
             tarjetasCamisas.forEach((item, index) => {
                 const idCamisaStr = item.id.replace('camisa_card_', '');
+                const cantidadCamisas = parseInt(item.querySelector('.cam_cantidad').value) || 1;
                 const selectLinea = item.querySelector('.cam_linea');
                 const lineaNombre = selectLinea.value;
                 const precioBase = parseFloat(item.querySelector('.cam_precio_base').value) || 0;
-                
                 const precioExtra = parseFloat(item.querySelector('.cam_precio_extra').value) || 0;
-                const precioCamisaTotal = precioBase + precioExtra;
-                sumaTotal += precioCamisaTotal;
-                cantidadTotalUnidades += 1;
+                
+                const precioUnitarioTotal = precioBase + precioExtra;
+                const subtotalGrupoCamisas = cantidadCamisas * precioUnitarioTotal;
+                
+                sumaTotal += subtotalGrupoCamisas;
+                cantidadTotalUnidades += cantidadCamisas;
+                totalCamisasUnidades += cantidadCamisas;
                 
                 const talla = item.querySelector('.cam_talla').value;
                 const tallaFormateada = (talla === 'SIN CONFIRMAR') ? '<span class="talla-alerta">⚠️ SIN CONFIRMAR</span>' : `<strong>${talla}</strong>`;
@@ -836,12 +852,12 @@
                 tbodyCamisasCliente.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
+                        <td><strong>${cantidadCamisas} u.</strong></td>
                         <td>${lineaNombre}</td>
                         <td>${tallaFormateada}</td>
                         <td>${colores}</td>
                         <td>${textoBordadosPrincipales}</td>
-                        <td>${textoExtra}</td>
-                        <td>$${precioCamisaTotal.toLocaleString('es-CO')}</td>
+                        <td>$${subtotalGrupoCamisas.toLocaleString('es-CO')}</td>
                     </tr>
                 `;
                 
@@ -852,12 +868,15 @@
                     const htmlFotos = listaFotos.map(src => `<img src="${src}" class="foto-tabla">`).join('');
                     celdaFoto = `<div class="galeria-fotos">${htmlFotos}</div>`;
                 }
+
+                const etiquetaVolumenTaller = cantidadCamisas > 1 ? 
+                    `<br><span class="badge-lote">Lote: ${cantidadCamisas} Unidades</span>` : '';
                 
                 tbodyCamisasTaller.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td style="text-align:center;">${celdaFoto}</td>
-                        <td>${lineaNombre}<br><small style="color:#64748b;">${modelo}</small></td>
+                        <td>${lineaNombre} (${modelo})${etiquetaVolumenTaller}</td>
                         <td>${tallaFormateada}</td>
                         <td>${colores}</td>
                         <td>${textoBordadosPrincipales}</td>
@@ -868,13 +887,15 @@
                 tbodyCotizacion.innerHTML += `
                     <tr>
                         <td>Camisa industrial línea ${lineaNombre} (${modelo}) - Talla ${talla}</td>
-                        <td style="text-align:center;">1</td>
-                        <td style="text-align:right;">$${precioCamisaTotal.toLocaleString('es-CO')}</td>
-                        <td style="text-align:right;">$${precioCamisaTotal.toLocaleString('es-CO')}</td>
+                        <td style="text-align:center;">${cantidadCamisas}</td>
+                        <td style="text-align:right;">$${precioUnitarioTotal.toLocaleString('es-CO')}</td>
+                        <td style="text-align:right;">$${subtotalGrupoCamisas.toLocaleString('es-CO')}</td>
                     </tr>
                 `;
             });
             
+            document.getElementById('out_taller_cant_camisas').innerText = totalCamisasUnidades;
+
             // Capuchones
             const tarjetasCapuchones = document.querySelectorAll('.tarjeta-capuchon-input');
             document.getElementById('out_taller_cant_capuchones').innerText = tarjetasCapuchones.length;
